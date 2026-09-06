@@ -1,0 +1,332 @@
+generator client {
+  provider        = "prisma-client"
+  previewFeatures = ["postgresqlExtensions"]
+  output          = "../src/generated/prisma"
+  runtime         = "nodejs"
+  moduleFormat    = "cjs"
+}
+
+datasource db {
+  provider   = "postgresql"
+  extensions = [postgis, pg_trgm]
+}
+
+enum UserRole {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+}
+
+enum ListingType {
+  SALE
+  DONATION
+  BARTER
+  REQUEST
+}
+
+enum ListingStatus {
+  DRAFT
+  ACTIVE
+  RESERVED
+  COMPLETED
+  ARCHIVED
+  REJECTED
+}
+
+enum ListingCondition {
+  NEW
+  LIKE_NEW
+  GOOD
+  FAIR
+  POOR
+}
+
+enum ReportTargetType {
+  USER
+  LISTING
+}
+
+enum ReportReason {
+  FRAUD
+  SPAM
+  PROHIBITED_ITEM
+  HARASSMENT
+  MISLEADING
+  DUPLICATE
+  OTHER
+}
+
+enum ReportStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+  DISMISSED
+}
+
+enum NotificationChannel {
+  IN_APP
+  PUSH
+  EMAIL
+  SMS
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  RUNNING
+  ENDED
+}
+
+model User {
+  id            String     @id @default(uuid()) @db.Uuid
+  phone         String     @unique
+  email         String?    @unique
+  phoneVerified Boolean    @default(false)
+  role          UserRole   @default(USER)
+  status        UserStatus @default(PENDING)
+  lastSeenAt    DateTime?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  profile            Profile?
+  devices            Device[]
+  sessions           Session[]
+  phoneVerifications PhoneVerification[]
+  listings           Listing[]
+  favorites          Favorite[]
+  notifications      Notification[]
+  reportsFiled       Report[]            @relation("ReportAuthor")
+
+  @@index([status])
+  @@map("users")
+}
+
+model Profile {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @unique @db.Uuid
+  displayName String
+  bio         String?
+  avatarKey   String?
+  city        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("profiles")
+}
+
+model Device {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @db.Uuid
+  platform   String
+  name       String?
+  pushToken  String?
+  lastSeenAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessions Session[]
+
+  @@unique([userId, pushToken])
+  @@index([userId])
+  @@map("devices")
+}
+
+model Session {
+  id               String    @id @default(uuid()) @db.Uuid
+  userId           String    @db.Uuid
+  deviceId         String?   @db.Uuid
+  refreshTokenHash String
+  userAgent        String?
+  ipAddress        String?
+  expiresAt        DateTime
+  revokedAt        DateTime?
+  replacedById     String?   @db.Uuid
+  createdAt        DateTime  @default(now())
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  device Device? @relation(fields: [deviceId], references: [id], onDelete: SetNull)
+
+  @@index([userId, revokedAt])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+model PhoneVerification {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String?   @db.Uuid
+  phone      String
+  codeHash   String
+  attempts   Int       @default(0)
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([phone, createdAt])
+  @@map("phone_verifications")
+}
+
+model Category {
+  id        String   @id @default(uuid()) @db.Uuid
+  parentId  String?  @db.Uuid
+  name      String
+  slug      String   @unique
+  icon      String?
+  sortOrder Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children Category[] @relation("CategoryTree")
+  listings Listing[]
+
+  @@index([parentId, sortOrder])
+  @@map("categories")
+}
+
+model Listing {
+  id          String            @id @default(uuid()) @db.Uuid
+  sellerId    String            @db.Uuid
+  categoryId  String            @db.Uuid
+  title       String
+  description String
+  type        ListingType
+  status      ListingStatus     @default(DRAFT)
+  condition   ListingCondition?
+  price       Int?
+  currency    String            @default("XOF")
+  viewCount   Int               @default(0)
+  publishedAt DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  seller    User           @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  category  Category       @relation(fields: [categoryId], references: [id])
+  media     ListingMedia[]
+  favorites Favorite[]
+  location  Location?
+
+  @@index([status, publishedAt(sort: Desc)])
+  @@index([categoryId, status])
+  @@index([sellerId, status])
+  @@map("listings")
+}
+
+model ListingMedia {
+  id         String   @id @default(uuid()) @db.Uuid
+  listingId  String   @db.Uuid
+  storageKey String
+  mimeType   String
+  size       Int
+  width      Int?
+  height     Int?
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@index([listingId, sortOrder])
+  @@map("listing_media")
+}
+
+/// Exact coordinates stay private; `publicLatitude`/`publicLongitude` are snapped
+/// to a coarse grid and are the only ones the public API is allowed to return.
+model Location {
+  id              String                                @id @default(uuid()) @db.Uuid
+  listingId       String                                @unique @db.Uuid
+  country         String                                @default("SN")
+  region          String?
+  city            String?
+  district        String?
+  displayName     String
+  latitude        Float
+  longitude       Float
+  publicLatitude  Float
+  publicLongitude Float
+  geom            Unsupported("geography(Point, 4326)")?
+  createdAt       DateTime                              @default(now())
+  updatedAt       DateTime                              @updatedAt
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@index([country, city])
+  @@map("locations")
+}
+
+model Favorite {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  listingId String   @db.Uuid
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, listingId])
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("favorites")
+}
+
+model Report {
+  id         String           @id @default(uuid()) @db.Uuid
+  reporterId String           @db.Uuid
+  targetType ReportTargetType
+  targetId   String           @db.Uuid
+  reason     ReportReason
+  comment    String?
+  status     ReportStatus     @default(OPEN)
+  reviewedAt DateTime?
+  reviewedBy String?          @db.Uuid
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+
+  reporter User @relation("ReportAuthor", fields: [reporterId], references: [id], onDelete: Cascade)
+
+  @@unique([reporterId, targetType, targetId])
+  @@index([status, createdAt])
+  @@map("reports")
+}
+
+model Notification {
+  id        String              @id @default(uuid()) @db.Uuid
+  userId    String              @db.Uuid
+  channel   NotificationChannel @default(IN_APP)
+  type      String
+  title     String
+  body      String
+  data      Json?
+  readAt    DateTime?
+  sentAt    DateTime?
+  createdAt DateTime            @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt, createdAt(sort: Desc)])
+  @@map("notifications")
+}
+
+model Campaign {
+  id          String         @id @default(uuid()) @db.Uuid
+  slug        String         @unique
+  title       String
+  description String?
+  status      CampaignStatus @default(DRAFT)
+  startsAt    DateTime
+  endsAt      DateTime?
+  metadata    Json?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([status, startsAt])
+  @@map("campaigns")
+}
