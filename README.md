@@ -1,23 +1,25 @@
 # Wantere
 
-Wantere is a community marketplace for buying, selling, giving away and swapping
-things locally. It is built for Senegal first, but nothing in the architecture
-assumes a single country.
+Wantere est une plateforme communautaire pour acheter, vendre, donner et
+échanger des biens près de chez soi. Elle est pensée d'abord pour le Sénégal,
+mais rien dans son architecture ne suppose un pays unique.
 
-The product is organised around proximity and trust: listings are tied to a
-neighbourhood, prices are visible, donations and barter are first-class citizens
-next to sales, and moderation is part of the domain rather than an afterthought.
+Le produit s'organise autour de la proximité et de la confiance : une annonce est
+rattachée à un quartier, les prix sont visibles, le don et le troc sont traités
+au même niveau que la vente, et la modération fait partie du domaine métier
+plutôt que d'être ajoutée après coup.
 
-## Status
+## État du projet
 
-The foundation is in place: authentication, profiles, categories, listings with
-geolocated search, favorites, reports and notifications. Conversations, offers,
-orders, group buying and the price observatory are designed for but not
-implemented — see [docs/architecture.md](docs/architecture.md).
+Les fondations sont en place : authentification, profils, catégories, annonces
+avec recherche géolocalisée, favoris, signalements et notifications. Les
+conversations, les offres, les commandes, les achats groupés et l'observatoire
+des prix sont prévus dans l'architecture mais pas encore implémentés — voir
+[docs/architecture.md](docs/architecture.md).
 
 ## Stack
 
-| Area     | Choice                                                       |
+| Domaine  | Choix                                                        |
 | -------- | ------------------------------------------------------------ |
 | Monorepo | Turborepo, pnpm workspaces, TypeScript strict                |
 | API      | NestJS, PostgreSQL + PostGIS, Prisma, Redis, BullMQ, OpenAPI |
@@ -25,34 +27,34 @@ implemented — see [docs/architecture.md](docs/architecture.md).
 | Mobile   | Expo, Expo Router, TanStack Query, Zustand                   |
 | Admin    | Next.js App Router, Tailwind CSS, TanStack Query             |
 
-## Repository layout
+## Structure du dépôt
 
 ```
 apps/
-  api/      NestJS modular monolith, source of truth for business rules
-  web/      Public website
-  mobile/   Expo application
-  admin/    Back office
+  api/      Monolithe modulaire NestJS, source de vérité des règles métier
+  web/      Site public
+  mobile/   Application Expo
+  admin/    Back-office
 packages/
-  api-client/       Fetch client generated from the OpenAPI document
-  validation/       Zod schemas shared across clients
-  types/            Domain enums and shared primitives
-  config/           Product constants (limits, pagination, currencies)
-  design-tokens/    Colors, spacing, typography, Tailwind theme
-  eslint-config/    Flat ESLint configurations
+  api-client/       Client fetch généré depuis le document OpenAPI
+  validation/       Schémas Zod partagés entre les clients
+  types/            Enums du domaine et primitives communes
+  config/           Constantes produit (limites, pagination, devises)
+  design-tokens/    Couleurs, espacements, typographie, thème Tailwind
+  eslint-config/    Configurations ESLint flat
   typescript-config/
   prettier-config/
-docker/     Local Postgres, Redis and MinIO
-docs/       Architecture notes
+docker/     Postgres, Redis et MinIO en local
+docs/       Notes d'architecture
 ```
 
-## Requirements
+## Prérequis
 
-- Node.js 22 or later (see `.nvmrc`)
+- Node.js 22 ou plus récent (voir `.nvmrc`)
 - pnpm 11
-- Docker, for Postgres and Redis
+- Docker, pour Postgres et Redis
 
-## Getting started
+## Démarrage
 
 ```bash
 pnpm install
@@ -68,62 +70,65 @@ pnpm db:seed
 pnpm dev
 ```
 
-`pnpm dev` starts the API on port 4000, the website on 3000, the back office on
-3001 and the Expo bundler. Swagger is served on <http://localhost:4000/docs>
-outside production.
+`pnpm dev` démarre l'API sur le port 4000, le site sur 3000, le back-office sur
+3001 et le bundler Expo. Swagger est servi sur <http://localhost:4000/docs> en
+dehors de la production.
 
-## Environment
+## Variables d'environnement
 
-Every application ships an `.env.example`; no secret is versioned. The API
-validates its environment at boot and refuses to start on an invalid one.
+Chaque application fournit un `.env.example` ; aucun secret n'est versionné.
+L'API valide son environnement au démarrage et refuse de se lancer s'il est
+invalide.
 
-| Variable                           | Used by    | Notes                               |
-| ---------------------------------- | ---------- | ----------------------------------- |
-| `DATABASE_URL`                     | api        | PostgreSQL with PostGIS enabled     |
-| `REDIS_URL`                        | api        | Queues, rate limiting, OTP throttle |
-| `JWT_SECRET`, `JWT_REFRESH_SECRET` | api        | 32 characters minimum               |
-| `CORS_ORIGINS`                     | api        | Comma-separated list                |
-| `NEXT_PUBLIC_API_URL`              | web, admin | API origin, without the path prefix |
-| `EXPO_PUBLIC_API_URL`              | mobile     | API origin, without the path prefix |
+| Variable                           | Utilisée par | Remarques                          |
+| ---------------------------------- | ------------ | ---------------------------------- |
+| `DATABASE_URL`                     | api          | PostgreSQL avec PostGIS activé     |
+| `REDIS_URL`                        | api          | Files, rate limiting, throttle OTP |
+| `JWT_SECRET`, `JWT_REFRESH_SECRET` | api          | 32 caractères minimum              |
+| `CORS_ORIGINS`                     | api          | Liste séparée par des virgules     |
+| `NEXT_PUBLIC_API_URL`              | web, admin   | Origine de l'API, sans le préfixe  |
+| `EXPO_PUBLIC_API_URL`              | mobile       | Origine de l'API, sans le préfixe  |
 
-## Database
+## Base de données
 
 ```bash
-pnpm db:migrate     # create and apply a migration
-pnpm db:seed        # categories used by the applications
-pnpm db:studio      # inspect the data
+pnpm db:migrate     # créer et appliquer une migration
+pnpm db:seed        # catégories utilisées par les applications
+pnpm db:studio      # inspecter les données
 ```
 
-PostGIS columns are not representable in the Prisma schema language, so the
-geography column is declared as unsupported and filled from the location
-service; its GiST index and the full-text indexes live in a hand-written
-migration.
+Les colonnes PostGIS ne sont pas représentables dans le langage de schéma
+Prisma : la colonne géographique est donc déclarée comme non supportée et
+remplie par le service de localisation ; son index GiST et les index full-text
+vivent dans une migration écrite à la main.
 
-## Quality checks
+## Vérifications
 
 ```bash
 pnpm lint
 pnpm typecheck
 pnpm test
-pnpm --filter @wantere/api test:e2e   # requires Postgres and Redis
+pnpm --filter @wantere/api test:e2e   # nécessite Postgres et Redis
 pnpm build
 ```
 
-## API client
+## Client API
 
-The shared client is generated from the API's own OpenAPI document:
+Le client partagé est généré depuis le document OpenAPI de l'API :
 
 ```bash
 pnpm api:generate
 ```
 
-This exports `apps/api/openapi.json` and regenerates `@wantere/api-client`. Both
-are committed so the applications build without a running API.
+Cette commande exporte `apps/api/openapi.json` et régénère
+`@wantere/api-client`. Les deux sont versionnés pour que les applications
+compilent sans API démarrée.
 
-## Contributing
+## Contribuer
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md). Issues and pull requests are welcome.
+Lire [CONTRIBUTING.md](CONTRIBUTING.md). Les issues et pull requests sont les
+bienvenues.
 
-## License
+## Licence
 
-MIT — see [LICENSE](LICENSE).
+MIT — voir [LICENSE](LICENSE).
