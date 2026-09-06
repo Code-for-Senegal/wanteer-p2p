@@ -1,0 +1,13 @@
+{
+  "name": "@wantere/typescript-config",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "files": [
+    "base.json",
+    "nextjs.json",
+    "nestjs.json",
+    "react-native.json",
+    "library.json"
+  ]
+}

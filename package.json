@@ -1,0 +1,30 @@
+{
+  "name": "wantere",
+  "private": true,
+  "version": "0.1.0",
+  "license": "MIT",
+  "packageManager": "pnpm@11.22.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
+    "api:generate": "pnpm --filter @wantere/api openapi:export && pnpm --filter @wantere/api-client generate",
+    "db:migrate": "pnpm --filter @wantere/api db:migrate",
+    "db:seed": "pnpm --filter @wantere/api db:seed",
+    "db:studio": "pnpm --filter @wantere/api db:studio",
+    "docker:up": "docker compose -f docker/docker-compose.dev.yml up -d",
+    "docker:down": "docker compose -f docker/docker-compose.dev.yml down"
+  },
+  "devDependencies": {
+    "@wantere/prettier-config": "workspace:*",
+    "prettier": "^3.9.6",
+    "turbo": "^2.10.12"
+  }
+}

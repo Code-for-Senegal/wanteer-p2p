@@ -1,0 +1,28 @@
+{
+  "name": "@wantere/validation",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch --preserveWatchOutput",
+    "lint": "eslint src",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@wantere/config": "workspace:*",
+    "@wantere/types": "workspace:*",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@wantere/eslint-config": "workspace:*",
+    "@wantere/typescript-config": "workspace:*",
+    "eslint": "^10.10.0",
+    "typescript": "~6.0.3"
+  }
+}
