@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DATABASE_URL: postgresql://wantere:wantere@localhost:5432/wantere?schema=public
+  REDIS_URL: redis://localhost:6379
+  JWT_SECRET: ci-secret-value-that-is-long-enough-32
+  JWT_REFRESH_SECRET: ci-refresh-secret-long-enough-32-chars
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgis/postgis:17-3.5
+        env:
+          POSTGRES_USER: wantere
+          POSTGRES_PASSWORD: wantere
+          POSTGRES_DB: wantere
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U wantere -d wantere"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+      redis:
+        image: redis:8-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Apply database migrations
+        run: pnpm --filter @wantere/api db:deploy
+
+      - run: pnpm lint
+
+      - run: pnpm typecheck
+
+      - run: pnpm test
+
+      - name: Run end-to-end tests
+        run: pnpm --filter @wantere/api test:e2e
+
+      - run: pnpm build
