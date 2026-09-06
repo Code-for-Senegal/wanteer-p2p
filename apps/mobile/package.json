@@ -1,0 +1,40 @@
+{
+  "name": "@wantere/mobile",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "main": "expo-router/entry",
+  "scripts": {
+    "dev": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "build": "expo export --platform ios --platform android --output-dir dist",
+    "lint": "eslint app components features lib providers stores",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "@tanstack/react-query": "^5.102.8",
+    "@wantere/api-client": "workspace:*",
+    "@wantere/config": "workspace:*",
+    "@wantere/design-tokens": "workspace:*",
+    "@wantere/types": "workspace:*",
+    "@wantere/validation": "workspace:*",
+    "expo": "^57.0.20",
+    "expo-router": "~57.0.19",
+    "expo-secure-store": "~57.0.3",
+    "expo-status-bar": "~57.0.1",
+    "react": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-screens": "~4.26.2",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@wantere/eslint-config": "workspace:*",
+    "@wantere/typescript-config": "workspace:*",
+    "eslint": "^10.10.0",
+    "typescript": "~6.0.3"
+  }
+}

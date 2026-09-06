@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "Wantere",
+    "slug": "wantere",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "wantere",
+    "userInterfaceStyle": "light",
+    "platforms": ["ios", "android"],
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.wantere.app"
+    },
+    "android": {
+      "package": "com.wantere.app",
+      "edgeToEdgeEnabled": true
+    },
+    "plugins": ["expo-router", "expo-secure-store"],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "apiUrl": "http://localhost:4000/api/v1"
+    }
+  }
+}
