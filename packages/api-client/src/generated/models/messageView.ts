@@ -6,4 +6,10 @@
  * OpenAPI spec version: 1.0
  */
 
-export type ConversationsControllerSendMessageV1201 = { [key: string]: unknown };
+export interface MessageView {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  body: string;
+  createdAt: string;
+}

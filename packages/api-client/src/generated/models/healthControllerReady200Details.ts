@@ -5,7 +5,7 @@
  * Local commerce and exchange platform
  * OpenAPI spec version: 1.0
  */
-import type { HealthControllerReady200DetailsStatus } from './healthControllerReady200DetailsStatus';
+import type { HealthControllerReady200DetailsStatus } from './healthControllerReady200DetailsStatus.js';
 
 export type HealthControllerReady200Details = {[key: string]: {
   status: HealthControllerReady200DetailsStatus;

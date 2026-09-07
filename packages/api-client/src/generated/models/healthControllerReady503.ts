@@ -5,10 +5,10 @@
  * Local commerce and exchange platform
  * OpenAPI spec version: 1.0
  */
-import type { HealthControllerReady503Details } from './healthControllerReady503Details';
-import type { HealthControllerReady503Error } from './healthControllerReady503Error';
-import type { HealthControllerReady503Info } from './healthControllerReady503Info';
-import type { HealthControllerReady503Status } from './healthControllerReady503Status';
+import type { HealthControllerReady503Details } from './healthControllerReady503Details.js';
+import type { HealthControllerReady503Error } from './healthControllerReady503Error.js';
+import type { HealthControllerReady503Info } from './healthControllerReady503Info.js';
+import type { HealthControllerReady503Status } from './healthControllerReady503Status.js';
 
 export type HealthControllerReady503 = {
   status?: HealthControllerReady503Status;

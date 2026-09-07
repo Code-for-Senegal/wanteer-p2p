@@ -10,11 +10,10 @@ import type {
   AuthTokensDto,
   CategoriesControllerFindBySlugV1200,
   CategoriesControllerTreeV1200Item,
+  ConversationPageView,
+  ConversationView,
   ConversationsControllerFindMessagesV1Params,
   ConversationsControllerFindMineV1Params,
-  ConversationsControllerFindOneV1200,
-  ConversationsControllerSendMessageV1201,
-  ConversationsControllerStartV1201,
   CreateCategoryDto,
   CreateListingDto,
   CreateReportDto,
@@ -27,6 +26,8 @@ import type {
   ListingsControllerFindOneV1200,
   ListingsControllerUpdateV1200,
   LoginDto,
+  MessagePageView,
+  MessageView,
   NotificationsControllerListV1Params,
   OtpChallengeDto,
   RefreshDto,
@@ -42,7 +43,7 @@ import type {
   VerifyOtpDto
 } from './models';
 
-import { request } from '../http-client';
+import { request } from '../http-client.js';
 
 export type authControllerRegisterV1Response200 = {
   data: OtpChallengeDto
@@ -998,18 +999,6 @@ export const favoritesControllerRemoveV1 = async (listingId: string, options?: P
 
 
 
-export type conversationsControllerStartV1Response201 = {
-  data: ConversationsControllerStartV1201
-  status: 201
-}
-
-export type conversationsControllerStartV1ResponseSuccess = (conversationsControllerStartV1Response201) & {
-  headers: Headers;
-};
-;
-
-export type conversationsControllerStartV1Response = (conversationsControllerStartV1ResponseSuccess)
-
 export const getConversationsControllerStartV1Url = () => {
 
 
@@ -1022,7 +1011,7 @@ export const getConversationsControllerStartV1Url = () => {
  * One conversation exists per listing and interested member. Opening requires an ACTIVE listing owned by someone else; an existing conversation is returned as-is.
  * @summary Start a conversation about a listing, or return the existing one
  */
-export const conversationsControllerStartV1 = async (startConversationDto: StartConversationDto, options?: Parameters<typeof request>[1]): Promise<conversationsControllerStartV1Response> => {
+export const conversationsControllerStartV1 = async (startConversationDto: StartConversationDto, options?: Parameters<typeof request>[1]): Promise<ConversationView> => {
 
     const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
     if (!h) return {};
@@ -1030,7 +1019,7 @@ export const conversationsControllerStartV1 = async (startConversationDto: Start
     if (Array.isArray(h)) return Object.fromEntries(h);
     return h;
   };
-return request<conversationsControllerStartV1Response>(getConversationsControllerStartV1Url(),
+return request<ConversationView>(getConversationsControllerStartV1Url(),
   {
     ...options,
     method: 'POST',
@@ -1040,18 +1029,6 @@ return request<conversationsControllerStartV1Response>(getConversationsControlle
 );}
 
 
-
-export type conversationsControllerFindMineV1Response200 = {
-  data: void
-  status: 200
-}
-
-export type conversationsControllerFindMineV1ResponseSuccess = (conversationsControllerFindMineV1Response200) & {
-  headers: Headers;
-};
-;
-
-export type conversationsControllerFindMineV1Response = (conversationsControllerFindMineV1ResponseSuccess)
 
 export const getConversationsControllerFindMineV1Url = (params?: ConversationsControllerFindMineV1Params,) => {
   const normalizedParams = new URLSearchParams();
@@ -1071,9 +1048,9 @@ export const getConversationsControllerFindMineV1Url = (params?: ConversationsCo
 /**
  * @summary Conversations the authenticated member takes part in
  */
-export const conversationsControllerFindMineV1 = async (params?: ConversationsControllerFindMineV1Params, options?: Parameters<typeof request>[1]): Promise<conversationsControllerFindMineV1Response> => {
+export const conversationsControllerFindMineV1 = async (params?: ConversationsControllerFindMineV1Params, options?: Parameters<typeof request>[1]): Promise<ConversationPageView> => {
 
-  return request<conversationsControllerFindMineV1Response>(getConversationsControllerFindMineV1Url(params),
+  return request<ConversationPageView>(getConversationsControllerFindMineV1Url(params),
   {
     ...options,
     method: 'GET'
@@ -1083,18 +1060,6 @@ export const conversationsControllerFindMineV1 = async (params?: ConversationsCo
 );}
 
 
-
-export type conversationsControllerFindOneV1Response200 = {
-  data: ConversationsControllerFindOneV1200
-  status: 200
-}
-
-export type conversationsControllerFindOneV1ResponseSuccess = (conversationsControllerFindOneV1Response200) & {
-  headers: Headers;
-};
-;
-
-export type conversationsControllerFindOneV1Response = (conversationsControllerFindOneV1ResponseSuccess)
 
 export const getConversationsControllerFindOneV1Url = (id: string,) => {
 
@@ -1107,9 +1072,9 @@ export const getConversationsControllerFindOneV1Url = (id: string,) => {
 /**
  * @summary Conversation detail, participants only
  */
-export const conversationsControllerFindOneV1 = async (id: string, options?: Parameters<typeof request>[1]): Promise<conversationsControllerFindOneV1Response> => {
+export const conversationsControllerFindOneV1 = async (id: string, options?: Parameters<typeof request>[1]): Promise<ConversationView> => {
 
-  return request<conversationsControllerFindOneV1Response>(getConversationsControllerFindOneV1Url(id),
+  return request<ConversationView>(getConversationsControllerFindOneV1Url(id),
   {
     ...options,
     method: 'GET'
@@ -1119,18 +1084,6 @@ export const conversationsControllerFindOneV1 = async (id: string, options?: Par
 );}
 
 
-
-export type conversationsControllerFindMessagesV1Response200 = {
-  data: void
-  status: 200
-}
-
-export type conversationsControllerFindMessagesV1ResponseSuccess = (conversationsControllerFindMessagesV1Response200) & {
-  headers: Headers;
-};
-;
-
-export type conversationsControllerFindMessagesV1Response = (conversationsControllerFindMessagesV1ResponseSuccess)
 
 export const getConversationsControllerFindMessagesV1Url = (id: string,
     params?: ConversationsControllerFindMessagesV1Params,) => {
@@ -1152,9 +1105,9 @@ export const getConversationsControllerFindMessagesV1Url = (id: string,
  * @summary Messages of a conversation, newest first, participants only
  */
 export const conversationsControllerFindMessagesV1 = async (id: string,
-    params?: ConversationsControllerFindMessagesV1Params, options?: Parameters<typeof request>[1]): Promise<conversationsControllerFindMessagesV1Response> => {
+    params?: ConversationsControllerFindMessagesV1Params, options?: Parameters<typeof request>[1]): Promise<MessagePageView> => {
 
-  return request<conversationsControllerFindMessagesV1Response>(getConversationsControllerFindMessagesV1Url(id,params),
+  return request<MessagePageView>(getConversationsControllerFindMessagesV1Url(id,params),
   {
     ...options,
     method: 'GET'
@@ -1164,18 +1117,6 @@ export const conversationsControllerFindMessagesV1 = async (id: string,
 );}
 
 
-
-export type conversationsControllerSendMessageV1Response201 = {
-  data: ConversationsControllerSendMessageV1201
-  status: 201
-}
-
-export type conversationsControllerSendMessageV1ResponseSuccess = (conversationsControllerSendMessageV1Response201) & {
-  headers: Headers;
-};
-;
-
-export type conversationsControllerSendMessageV1Response = (conversationsControllerSendMessageV1ResponseSuccess)
 
 export const getConversationsControllerSendMessageV1Url = (id: string,) => {
 
@@ -1189,7 +1130,7 @@ export const getConversationsControllerSendMessageV1Url = (id: string,) => {
  * @summary Send a text message, participants only
  */
 export const conversationsControllerSendMessageV1 = async (id: string,
-    sendMessageDto: SendMessageDto, options?: Parameters<typeof request>[1]): Promise<conversationsControllerSendMessageV1Response> => {
+    sendMessageDto: SendMessageDto, options?: Parameters<typeof request>[1]): Promise<MessageView> => {
 
     const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
     if (!h) return {};
@@ -1197,7 +1138,7 @@ export const conversationsControllerSendMessageV1 = async (id: string,
     if (Array.isArray(h)) return Object.fromEntries(h);
     return h;
   };
-return request<conversationsControllerSendMessageV1Response>(getConversationsControllerSendMessageV1Url(id),
+return request<MessageView>(getConversationsControllerSendMessageV1Url(id),
   {
     ...options,
     method: 'POST',

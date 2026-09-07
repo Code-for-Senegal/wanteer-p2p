@@ -1,4 +1,5 @@
 import request from 'supertest';
+import { buildOpenApiDocument } from '../src/bootstrap';
 import { MESSAGE_LIMITS } from '@wantere/config';
 import { createTestApp, type TestContext } from './setup';
 
@@ -80,6 +81,22 @@ describe('Listing conversations', () => {
     await context.app.close();
   });
 
+  it('publishes concrete response schemas for every conversation endpoint', () => {
+    const document = buildOpenApiDocument(context.app);
+    const responses = [
+      ['/api/v1/conversations', 'post', '201', 'ConversationView'],
+      ['/api/v1/conversations', 'get', '200', 'ConversationPageView'],
+      ['/api/v1/conversations/{id}', 'get', '200', 'ConversationView'],
+      ['/api/v1/conversations/{id}/messages', 'get', '200', 'MessagePageView'],
+      ['/api/v1/conversations/{id}/messages', 'post', '201', 'MessageView'],
+    ] as const;
+    for (const [path, method, status, schema] of responses) {
+      expect(document.paths[path]?.[method]?.responses[status]).toMatchObject({
+        content: { 'application/json': { schema: { $ref: `#/components/schemas/${schema}` } } },
+      });
+    }
+  });
+
   it('refuses anonymous access', async () => {
     await server().post(context.path('/conversations')).send({ listingId }).expect(401);
     await server().get(context.path('/conversations')).expect(401);
@@ -119,6 +136,7 @@ describe('Listing conversations', () => {
       'role',
     ]);
     expect(response.body.listing).not.toHaveProperty('location');
+    expect(response.body.listing).not.toHaveProperty('status');
   });
 
   it('reuses the conversation on repeated and concurrent contact requests', async () => {
@@ -228,6 +246,30 @@ describe('Listing conversations', () => {
     const inbox = await server().get(context.path('/conversations')).set(as('owner')).expect(200);
     expect(inbox.body.items[0].id).toBe(conversationId);
     expect(inbox.body.items[0].lastMessage.body).toBe('Oui, il est disponible.');
+  });
+
+  it('does not overwrite a newer activity timestamp with an older send', async () => {
+    const otherListingId = await publish('Test activité');
+    const started = await server()
+      .post(context.path('/conversations'))
+      .set(as('interested'))
+      .send({ listingId: otherListingId })
+      .expect(201);
+    // Model another request having already committed a newer message timestamp.
+    const newer = new Date(Date.now() + 60_000);
+    await context.prisma.conversation.update({
+      where: { id: started.body.id },
+      data: { lastActivityAt: newer },
+    });
+    await server()
+      .post(context.path(`/conversations/${started.body.id}/messages`))
+      .set(as('interested'))
+      .send({ body: 'Message retardé' })
+      .expect(201);
+    const conversation = await context.prisma.conversation.findUniqueOrThrow({
+      where: { id: started.body.id },
+    });
+    expect(conversation.lastActivityAt).toEqual(newer);
   });
 
   it('keeps other members out of the conversation', async () => {

@@ -1,8 +1,20 @@
 import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import type { AuthenticatedUser } from '../../common/guards/jwt-auth.guard';
 import { PaginationQueryDto } from '../../common/dto/pagination.dto';
+import {
+  ConversationView,
+  ConversationPageView,
+  MessageView,
+  MessagePageView,
+} from './conversation.serializer';
 import { ConversationsService } from './conversations.service';
 import { SendMessageDto } from './dto/send-message.dto';
 import { StartConversationDto } from './dto/start-conversation.dto';
@@ -19,24 +31,28 @@ export class ConversationsController {
     description:
       'One conversation exists per listing and interested member. Opening requires an ACTIVE listing owned by someone else; an existing conversation is returned as-is.',
   })
+  @ApiCreatedResponse({ type: ConversationView })
   start(@CurrentUser() user: AuthenticatedUser, @Body() dto: StartConversationDto) {
     return this.conversations.startOrReuse(user.id, dto.listingId);
   }
 
   @Get()
   @ApiOperation({ summary: 'Conversations the authenticated member takes part in' })
+  @ApiOkResponse({ type: ConversationPageView })
   findMine(@CurrentUser() user: AuthenticatedUser, @Query() query: PaginationQueryDto) {
     return this.conversations.findForMember(user.id, query);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Conversation detail, participants only' })
+  @ApiOkResponse({ type: ConversationView })
   findOne(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: AuthenticatedUser) {
     return this.conversations.findOne(id, user.id);
   }
 
   @Get(':id/messages')
   @ApiOperation({ summary: 'Messages of a conversation, newest first, participants only' })
+  @ApiOkResponse({ type: MessagePageView })
   findMessages(
     @Param('id', ParseUUIDPipe) id: string,
     @CurrentUser() user: AuthenticatedUser,
@@ -47,6 +63,7 @@ export class ConversationsController {
 
   @Post(':id/messages')
   @ApiOperation({ summary: 'Send a text message, participants only' })
+  @ApiCreatedResponse({ type: MessageView })
   sendMessage(
     @Param('id', ParseUUIDPipe) id: string,
     @CurrentUser() user: AuthenticatedUser,

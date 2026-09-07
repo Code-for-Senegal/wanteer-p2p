@@ -52,17 +52,19 @@ describe('ConversationsService', () => {
       findMany: jest.fn(),
       count: jest.fn(),
       create: jest.fn(),
-      update: jest.fn(),
+      updateMany: jest.fn(),
     },
     conversationParticipant: { findUnique: jest.fn() },
     message: { create: jest.fn(), findMany: jest.fn(), count: jest.fn() },
+    $queryRaw: jest.fn(),
     $transaction: jest.fn(),
   };
 
   let service: ConversationsService;
 
   beforeEach(async () => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
+    prisma.$transaction.mockImplementation((callback) => callback(prisma));
 
     const moduleRef = await Test.createTestingModule({
       providers: [
@@ -88,7 +90,7 @@ describe('ConversationsService', () => {
 
     it('refuses a conversation on the member’s own listing', async () => {
       prisma.conversation.findUnique.mockResolvedValue(null);
-      prisma.listing.findUnique.mockResolvedValue({ sellerId: ownerId, status: 'ACTIVE' });
+      prisma.$queryRaw.mockResolvedValue([{ sellerId: ownerId, status: 'ACTIVE' }]);
 
       await expect(service.startOrReuse(ownerId, listingId)).rejects.toBeInstanceOf(
         BadRequestException,
@@ -100,7 +102,7 @@ describe('ConversationsService', () => {
       'refuses to open a conversation on a %s listing',
       async (status) => {
         prisma.conversation.findUnique.mockResolvedValue(null);
-        prisma.listing.findUnique.mockResolvedValue({ sellerId: ownerId, status });
+        prisma.$queryRaw.mockResolvedValue([{ sellerId: ownerId, status }]);
 
         await expect(service.startOrReuse(interestedId, listingId)).rejects.toBeInstanceOf(
           ConflictException,
@@ -111,7 +113,7 @@ describe('ConversationsService', () => {
 
     it('treats a rejected listing as missing', async () => {
       prisma.conversation.findUnique.mockResolvedValue(null);
-      prisma.listing.findUnique.mockResolvedValue({ sellerId: ownerId, status: 'REJECTED' });
+      prisma.$queryRaw.mockResolvedValue([{ sellerId: ownerId, status: 'REJECTED' }]);
 
       await expect(service.startOrReuse(interestedId, listingId)).rejects.toBeInstanceOf(
         NotFoundException,
@@ -120,7 +122,7 @@ describe('ConversationsService', () => {
 
     it('opens a conversation with the owner and the interested member', async () => {
       prisma.conversation.findUnique.mockResolvedValue(null);
-      prisma.listing.findUnique.mockResolvedValue({ sellerId: ownerId, status: 'ACTIVE' });
+      prisma.$queryRaw.mockResolvedValue([{ sellerId: ownerId, status: 'ACTIVE' }]);
       prisma.conversation.create.mockResolvedValue(conversationRecord);
 
       const view = await service.startOrReuse(interestedId, listingId);
@@ -149,7 +151,7 @@ describe('ConversationsService', () => {
       prisma.conversation.findUnique
         .mockResolvedValueOnce(null)
         .mockResolvedValueOnce(conversationRecord);
-      prisma.listing.findUnique.mockResolvedValue({ sellerId: ownerId, status: 'ACTIVE' });
+      prisma.$queryRaw.mockResolvedValue([{ sellerId: ownerId, status: 'ACTIVE' }]);
       prisma.conversation.create.mockRejectedValue(
         new Prisma.PrismaClientKnownRequestError('Unique constraint failed', {
           code: 'P2002',
@@ -165,7 +167,7 @@ describe('ConversationsService', () => {
 
     it('does not swallow other database errors', async () => {
       prisma.conversation.findUnique.mockResolvedValue(null);
-      prisma.listing.findUnique.mockResolvedValue({ sellerId: ownerId, status: 'ACTIVE' });
+      prisma.$queryRaw.mockResolvedValue([{ sellerId: ownerId, status: 'ACTIVE' }]);
       prisma.conversation.create.mockRejectedValue(new Error('connection lost'));
 
       await expect(service.startOrReuse(interestedId, listingId)).rejects.toThrow(
@@ -191,16 +193,14 @@ describe('ConversationsService', () => {
 
     it('lets a participant keep writing regardless of the listing status', async () => {
       prisma.conversationParticipant.findUnique.mockResolvedValue({ id: 'participant' });
-      prisma.$transaction.mockResolvedValue([
-        {
-          id: 'm1',
-          conversationId,
-          senderId: interestedId,
-          body: 'On se voit demain ?',
-          createdAt: now,
-        },
-        {},
-      ]);
+      prisma.$transaction.mockImplementation((callback) => callback(prisma));
+      prisma.message.create.mockResolvedValue({
+        id: 'm1',
+        conversationId,
+        senderId: interestedId,
+        body: 'On se voit demain ?',
+        createdAt: now,
+      });
 
       const message = await service.sendMessage(
         conversationId,
@@ -210,9 +210,9 @@ describe('ConversationsService', () => {
 
       expect(message.body).toBe('On se voit demain ?');
       expect(prisma.listing.findUnique).not.toHaveBeenCalled();
-      expect(prisma.conversation.update).toHaveBeenCalledWith({
-        where: { id: conversationId },
-        data: { lastActivityAt: expect.any(Date) },
+      expect(prisma.conversation.updateMany).toHaveBeenCalledWith({
+        where: { id: conversationId, lastActivityAt: { lt: now } },
+        data: { lastActivityAt: now },
       });
     });
   });
@@ -247,6 +247,15 @@ describe('ConversationsService', () => {
           role: 'OWNER',
         },
       ]);
+    });
+
+    it('omits listing moderation status even after rejection', async () => {
+      prisma.conversation.findFirst.mockResolvedValue({
+        ...conversationRecord,
+        listing: { ...conversationRecord.listing, status: 'REJECTED' },
+      });
+      const view = await service.findOne(conversationId, interestedId);
+      expect(view.listing).not.toHaveProperty('status');
     });
 
     it('orders lists deterministically with the id as tie-breaker', async () => {

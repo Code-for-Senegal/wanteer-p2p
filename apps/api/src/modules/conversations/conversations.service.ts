@@ -17,7 +17,6 @@ const conversationInclude = {
       id: true,
       title: true,
       type: true,
-      status: true,
       price: true,
       currency: true,
       media: { orderBy: { sortOrder: 'asc' }, take: 1, select: { storageKey: true } },
@@ -67,36 +66,38 @@ export class ConversationsService {
       return this.toView(existing);
     }
 
-    const listing = await this.prisma.listing.findUnique({
-      where: { id: listingId },
-      select: { sellerId: true, status: true },
-    });
-
-    if (!listing || listing.status === 'REJECTED') {
-      throw new NotFoundException('Listing not found');
-    }
-
-    if (listing.sellerId === userId) {
-      throw new BadRequestException('You cannot start a conversation on your own listing');
-    }
-
-    if (listing.status !== 'ACTIVE') {
-      throw new ConflictException('This listing is not open to new conversations');
-    }
-
     try {
-      const created = await this.prisma.conversation.create({
-        data: {
-          listingId,
-          interestedId: userId,
-          participants: {
-            create: [
-              { userId: listing.sellerId, role: 'OWNER' },
-              { userId, role: 'INTERESTED' },
-            ],
+      const created = await this.prisma.$transaction(async (tx) => {
+        // Hold eligibility stable until creation commits; status changes must wait.
+        const [listing] = await tx.$queryRaw<{ sellerId: string; status: string }[]>`
+          SELECT "sellerId", "status" FROM "listings"
+          WHERE "id" = ${listingId}::uuid FOR SHARE
+        `;
+        if (!listing || listing.status === 'REJECTED') {
+          throw new NotFoundException('Listing not found');
+        }
+
+        if (listing.sellerId === userId) {
+          throw new BadRequestException('You cannot start a conversation on your own listing');
+        }
+
+        if (listing.status !== 'ACTIVE') {
+          throw new ConflictException('This listing is not open to new conversations');
+        }
+
+        return tx.conversation.create({
+          data: {
+            listingId,
+            interestedId: userId,
+            participants: {
+              create: [
+                { userId: listing.sellerId, role: 'OWNER' },
+                { userId, role: 'INTERESTED' },
+              ],
+            },
           },
-        },
-        include: conversationInclude,
+          include: conversationInclude,
+        });
       });
 
       return this.toView(created);
@@ -174,13 +175,15 @@ export class ConversationsService {
   async sendMessage(conversationId: string, userId: string, body: string): Promise<MessageView> {
     await this.assertParticipant(conversationId, userId);
 
-    const [message] = await this.prisma.$transaction([
-      this.prisma.message.create({ data: { conversationId, senderId: userId, body } }),
-      this.prisma.conversation.update({
-        where: { id: conversationId },
-        data: { lastActivityAt: new Date() },
-      }),
-    ]);
+    const message = await this.prisma.$transaction(async (tx) => {
+      const created = await tx.message.create({ data: { conversationId, senderId: userId, body } });
+      // A delayed concurrent send must not move the inbox activity timestamp backwards.
+      await tx.conversation.updateMany({
+        where: { id: conversationId, lastActivityAt: { lt: created.createdAt } },
+        data: { lastActivityAt: created.createdAt },
+      });
+      return created;
+    });
 
     return this.toMessage(message);
   }
@@ -221,7 +224,6 @@ export class ConversationsService {
         id: conversation.listing.id,
         title: conversation.listing.title,
         type: conversation.listing.type,
-        status: conversation.listing.status,
         price: conversation.listing.price,
         currency: conversation.listing.currency,
         coverUrl: conversation.listing.media[0]

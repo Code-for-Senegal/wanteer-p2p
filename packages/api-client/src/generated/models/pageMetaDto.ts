@@ -6,4 +6,9 @@
  * OpenAPI spec version: 1.0
  */
 
-export type ConversationsControllerFindOneV1200 = { [key: string]: unknown };
+export interface PageMetaDto {
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+}
