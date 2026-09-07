@@ -15,6 +15,10 @@ export const LISTING_LIMITS = {
   maxPrice: 1_000_000_000,
 } as const;
 
+export const MESSAGE_LIMITS = {
+  bodyMax: 2000,
+} as const;
+
 export const MEDIA = {
   maxFileSizeBytes: 8 * 1024 * 1024,
   allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/avif'] as const,

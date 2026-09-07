@@ -10,6 +10,11 @@ import type {
   AuthTokensDto,
   CategoriesControllerFindBySlugV1200,
   CategoriesControllerTreeV1200Item,
+  ConversationsControllerFindMessagesV1Params,
+  ConversationsControllerFindMineV1Params,
+  ConversationsControllerFindOneV1200,
+  ConversationsControllerSendMessageV1201,
+  ConversationsControllerStartV1201,
   CreateCategoryDto,
   CreateListingDto,
   CreateReportDto,
@@ -28,7 +33,9 @@ import type {
   RegisterDto,
   ReportsControllerListV1Params,
   ReviewReportDto,
+  SendMessageDto,
   SessionUserDto,
+  StartConversationDto,
   UpdateCategoryDto,
   UpdateListingDto,
   UpdateProfileDto,
@@ -986,6 +993,216 @@ export const favoritesControllerRemoveV1 = async (listingId: string, options?: P
     method: 'DELETE'
 
 
+  }
+);}
+
+
+
+export type conversationsControllerStartV1Response201 = {
+  data: ConversationsControllerStartV1201
+  status: 201
+}
+
+export type conversationsControllerStartV1ResponseSuccess = (conversationsControllerStartV1Response201) & {
+  headers: Headers;
+};
+;
+
+export type conversationsControllerStartV1Response = (conversationsControllerStartV1ResponseSuccess)
+
+export const getConversationsControllerStartV1Url = () => {
+
+
+
+
+  return `/api/v1/conversations`
+}
+
+/**
+ * One conversation exists per listing and interested member. Opening requires an ACTIVE listing owned by someone else; an existing conversation is returned as-is.
+ * @summary Start a conversation about a listing, or return the existing one
+ */
+export const conversationsControllerStartV1 = async (startConversationDto: StartConversationDto, options?: Parameters<typeof request>[1]): Promise<conversationsControllerStartV1Response> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Array.isArray(h)) return Object.fromEntries(h);
+    return h;
+  };
+return request<conversationsControllerStartV1Response>(getConversationsControllerStartV1Url(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(startConversationDto)
+  }
+);}
+
+
+
+export type conversationsControllerFindMineV1Response200 = {
+  data: void
+  status: 200
+}
+
+export type conversationsControllerFindMineV1ResponseSuccess = (conversationsControllerFindMineV1Response200) & {
+  headers: Headers;
+};
+;
+
+export type conversationsControllerFindMineV1Response = (conversationsControllerFindMineV1ResponseSuccess)
+
+export const getConversationsControllerFindMineV1Url = (params?: ConversationsControllerFindMineV1Params,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v1/conversations?${stringifiedParams}` : `/api/v1/conversations`
+}
+
+/**
+ * @summary Conversations the authenticated member takes part in
+ */
+export const conversationsControllerFindMineV1 = async (params?: ConversationsControllerFindMineV1Params, options?: Parameters<typeof request>[1]): Promise<conversationsControllerFindMineV1Response> => {
+
+  return request<conversationsControllerFindMineV1Response>(getConversationsControllerFindMineV1Url(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+export type conversationsControllerFindOneV1Response200 = {
+  data: ConversationsControllerFindOneV1200
+  status: 200
+}
+
+export type conversationsControllerFindOneV1ResponseSuccess = (conversationsControllerFindOneV1Response200) & {
+  headers: Headers;
+};
+;
+
+export type conversationsControllerFindOneV1Response = (conversationsControllerFindOneV1ResponseSuccess)
+
+export const getConversationsControllerFindOneV1Url = (id: string,) => {
+
+
+
+
+  return `/api/v1/conversations/${id}`
+}
+
+/**
+ * @summary Conversation detail, participants only
+ */
+export const conversationsControllerFindOneV1 = async (id: string, options?: Parameters<typeof request>[1]): Promise<conversationsControllerFindOneV1Response> => {
+
+  return request<conversationsControllerFindOneV1Response>(getConversationsControllerFindOneV1Url(id),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+export type conversationsControllerFindMessagesV1Response200 = {
+  data: void
+  status: 200
+}
+
+export type conversationsControllerFindMessagesV1ResponseSuccess = (conversationsControllerFindMessagesV1Response200) & {
+  headers: Headers;
+};
+;
+
+export type conversationsControllerFindMessagesV1Response = (conversationsControllerFindMessagesV1ResponseSuccess)
+
+export const getConversationsControllerFindMessagesV1Url = (id: string,
+    params?: ConversationsControllerFindMessagesV1Params,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v1/conversations/${id}/messages?${stringifiedParams}` : `/api/v1/conversations/${id}/messages`
+}
+
+/**
+ * @summary Messages of a conversation, newest first, participants only
+ */
+export const conversationsControllerFindMessagesV1 = async (id: string,
+    params?: ConversationsControllerFindMessagesV1Params, options?: Parameters<typeof request>[1]): Promise<conversationsControllerFindMessagesV1Response> => {
+
+  return request<conversationsControllerFindMessagesV1Response>(getConversationsControllerFindMessagesV1Url(id,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+export type conversationsControllerSendMessageV1Response201 = {
+  data: ConversationsControllerSendMessageV1201
+  status: 201
+}
+
+export type conversationsControllerSendMessageV1ResponseSuccess = (conversationsControllerSendMessageV1Response201) & {
+  headers: Headers;
+};
+;
+
+export type conversationsControllerSendMessageV1Response = (conversationsControllerSendMessageV1ResponseSuccess)
+
+export const getConversationsControllerSendMessageV1Url = (id: string,) => {
+
+
+
+
+  return `/api/v1/conversations/${id}/messages`
+}
+
+/**
+ * @summary Send a text message, participants only
+ */
+export const conversationsControllerSendMessageV1 = async (id: string,
+    sendMessageDto: SendMessageDto, options?: Parameters<typeof request>[1]): Promise<conversationsControllerSendMessageV1Response> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Array.isArray(h)) return Object.fromEntries(h);
+    return h;
+  };
+return request<conversationsControllerSendMessageV1Response>(getConversationsControllerSendMessageV1Url(id),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(sendMessageDto)
   }
 );}
 
