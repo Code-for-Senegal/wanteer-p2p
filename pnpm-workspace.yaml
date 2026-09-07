@@ -2,21 +2,15 @@ packages:
   - apps/*
   - packages/*
 
+# pnpm 11: explicit allowlist for dependency lifecycle scripts.
+# Placeholders ("set this to true or false") leave builds unreviewed and
+# make `pnpm install` fail under strictDepBuilds (ERR_PNPM_IGNORED_BUILDS).
 allowBuilds:
-  '@parcel/watcher': set this to true or false
-  '@prisma/engines': set this to true or false
-  '@scarf/scarf': set this to true or false
-  argon2: set this to true or false
-  esbuild: set this to true or false
-  msgpackr-extract: set this to true or false
-  prisma: set this to true or false
-  unrs-resolver: set this to true or false
-
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - '@prisma/engines'
-  - argon2
-  - esbuild
-  - msgpackr-extract
-  - prisma
-  - unrs-resolver
+  '@parcel/watcher': true
+  '@prisma/engines': true
+  '@scarf/scarf': false
+  argon2: true
+  esbuild: true
+  msgpackr-extract: true
+  prisma: true
+  unrs-resolver: true

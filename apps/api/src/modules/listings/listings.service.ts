@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { DEFAULT_CURRENCY } from '@wantere/config';
-import { requiresPrice } from '@wantere/types';
+import { requiresPrice, type ListingType } from '@wantere/types';
 import { PrismaService } from '../../database/prisma.service';
 import { StorageService } from '../../infrastructure/storage/storage.service';
 import { LocationsService } from '../locations/locations.service';
@@ -153,11 +153,14 @@ export class ListingsService {
   }
 
   async update(id: string, userId: string, dto: UpdateListingDto): Promise<ListingDetail> {
-    await this.assertOwnership(id, userId);
+    const { type } = await this.assertOwnership(id, userId);
 
-    const { latitude, longitude, city, district, ...fields } = dto;
+    const { latitude, longitude, city, district, price, ...fields } = dto;
 
-    await this.prisma.listing.update({ where: { id }, data: fields });
+    await this.prisma.listing.update({
+      where: { id },
+      data: { ...fields, ...this.priceChange(type, price) },
+    });
 
     if (typeof latitude === 'number' && typeof longitude === 'number') {
       await this.locations.attachToListing(id, {
@@ -183,10 +186,10 @@ export class ListingsService {
     });
   }
 
-  private async assertOwnership(id: string, userId: string): Promise<void> {
+  private async assertOwnership(id: string, userId: string): Promise<{ type: ListingType }> {
     const listing = await this.prisma.listing.findUnique({
       where: { id },
-      select: { sellerId: true },
+      select: { sellerId: true, type: true },
     });
 
     if (!listing) {
@@ -196,6 +199,26 @@ export class ListingsService {
     if (listing.sellerId !== userId) {
       throw new ForbiddenException('This listing belongs to another member');
     }
+
+    return { type: listing.type };
+  }
+
+  /**
+   * Same rule as `create`: a sale always carries a price and nothing else ever
+   * does. The type cannot change after publication, so the stored one decides.
+   * `IsOptional` lets an explicit null through validation, hence the wider
+   * parameter type.
+   */
+  private priceChange(type: ListingType, price: number | null | undefined): { price?: number } {
+    if (!requiresPrice(type)) {
+      return {};
+    }
+
+    if (price === null) {
+      throw new BadRequestException('A price is required for a sale');
+    }
+
+    return price === undefined ? {} : { price };
   }
 
   private toSummary(

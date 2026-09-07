@@ -90,6 +90,44 @@ describe('Listing lifecycle', () => {
     expect(response.body.price).toBe(5000);
   });
 
+  it('refuses to remove the price of a sale', async () => {
+    await request(context.app.getHttpServer())
+      .patch(context.path(`/listings/${listingId}`))
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({ price: null })
+      .expect(400);
+
+    const detail = await request(context.app.getHttpServer())
+      .get(context.path(`/listings/${listingId}`))
+      .expect(200);
+    expect(detail.body.price).toBe(5000);
+  });
+
+  it('ignores a price added to a donation', async () => {
+    const server = request(context.app.getHttpServer());
+
+    const donation = await server
+      .post(context.path('/listings'))
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({
+        title: 'Livres à donner',
+        description: 'Manuels de collège.',
+        type: 'DONATION',
+        categoryId,
+        latitude: 14.6928,
+        longitude: -17.4467,
+      })
+      .expect(201);
+
+    const updated = await server
+      .patch(context.path(`/listings/${donation.body.id}`))
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({ price: 3000 })
+      .expect(200);
+
+    expect(updated.body.price).toBeNull();
+  });
+
   it('never exposes the exact coordinates', async () => {
     const response = await request(context.app.getHttpServer())
       .get(context.path(`/listings/${listingId}`))

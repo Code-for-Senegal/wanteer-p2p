@@ -57,13 +57,13 @@ docs/       Notes d'architecture
 ## Démarrage
 
 ```bash
-pnpm install
-pnpm docker:up
-
 cp apps/api/.env.example apps/api/.env
 cp apps/web/.env.example apps/web/.env
 cp apps/admin/.env.example apps/admin/.env
 cp apps/mobile/.env.example apps/mobile/.env
+
+pnpm install
+pnpm docker:up
 
 pnpm db:migrate
 pnpm db:seed
