@@ -10,6 +10,10 @@ import type {
   AuthTokensDto,
   CategoriesControllerFindBySlugV1200,
   CategoriesControllerTreeV1200Item,
+  ConversationPageView,
+  ConversationView,
+  ConversationsControllerFindMessagesV1Params,
+  ConversationsControllerFindMineV1Params,
   CreateCategoryDto,
   CreateListingDto,
   CreateReportDto,
@@ -22,20 +26,24 @@ import type {
   ListingsControllerFindOneV1200,
   ListingsControllerUpdateV1200,
   LoginDto,
+  MessagePageView,
+  MessageView,
   NotificationsControllerListV1Params,
   OtpChallengeDto,
   RefreshDto,
   RegisterDto,
   ReportsControllerListV1Params,
   ReviewReportDto,
+  SendMessageDto,
   SessionUserDto,
+  StartConversationDto,
   UpdateCategoryDto,
   UpdateListingDto,
   UpdateProfileDto,
   VerifyOtpDto
 } from './models';
 
-import { request } from '../http-client';
+import { request } from '../http-client.js';
 
 export type authControllerRegisterV1Response200 = {
   data: OtpChallengeDto
@@ -986,6 +994,156 @@ export const favoritesControllerRemoveV1 = async (listingId: string, options?: P
     method: 'DELETE'
 
 
+  }
+);}
+
+
+
+export const getConversationsControllerStartV1Url = () => {
+
+
+
+
+  return `/api/v1/conversations`
+}
+
+/**
+ * One conversation exists per listing and interested member. Opening requires an ACTIVE listing owned by someone else; an existing conversation is returned as-is.
+ * @summary Start a conversation about a listing, or return the existing one
+ */
+export const conversationsControllerStartV1 = async (startConversationDto: StartConversationDto, options?: Parameters<typeof request>[1]): Promise<ConversationView> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Array.isArray(h)) return Object.fromEntries(h);
+    return h;
+  };
+return request<ConversationView>(getConversationsControllerStartV1Url(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(startConversationDto)
+  }
+);}
+
+
+
+export const getConversationsControllerFindMineV1Url = (params?: ConversationsControllerFindMineV1Params,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v1/conversations?${stringifiedParams}` : `/api/v1/conversations`
+}
+
+/**
+ * @summary Conversations the authenticated member takes part in
+ */
+export const conversationsControllerFindMineV1 = async (params?: ConversationsControllerFindMineV1Params, options?: Parameters<typeof request>[1]): Promise<ConversationPageView> => {
+
+  return request<ConversationPageView>(getConversationsControllerFindMineV1Url(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+export const getConversationsControllerFindOneV1Url = (id: string,) => {
+
+
+
+
+  return `/api/v1/conversations/${id}`
+}
+
+/**
+ * @summary Conversation detail, participants only
+ */
+export const conversationsControllerFindOneV1 = async (id: string, options?: Parameters<typeof request>[1]): Promise<ConversationView> => {
+
+  return request<ConversationView>(getConversationsControllerFindOneV1Url(id),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+export const getConversationsControllerFindMessagesV1Url = (id: string,
+    params?: ConversationsControllerFindMessagesV1Params,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v1/conversations/${id}/messages?${stringifiedParams}` : `/api/v1/conversations/${id}/messages`
+}
+
+/**
+ * @summary Messages of a conversation, newest first, participants only
+ */
+export const conversationsControllerFindMessagesV1 = async (id: string,
+    params?: ConversationsControllerFindMessagesV1Params, options?: Parameters<typeof request>[1]): Promise<MessagePageView> => {
+
+  return request<MessagePageView>(getConversationsControllerFindMessagesV1Url(id,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+export const getConversationsControllerSendMessageV1Url = (id: string,) => {
+
+
+
+
+  return `/api/v1/conversations/${id}/messages`
+}
+
+/**
+ * @summary Send a text message, participants only
+ */
+export const conversationsControllerSendMessageV1 = async (id: string,
+    sendMessageDto: SendMessageDto, options?: Parameters<typeof request>[1]): Promise<MessageView> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Array.isArray(h)) return Object.fromEntries(h);
+    return h;
+  };
+return request<MessageView>(getConversationsControllerSendMessageV1Url(id),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(sendMessageDto)
   }
 );}
 

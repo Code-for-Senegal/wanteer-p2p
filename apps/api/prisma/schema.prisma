@@ -83,6 +83,11 @@ enum CampaignStatus {
   ENDED
 }
 
+enum ConversationParticipantRole {
+  OWNER
+  INTERESTED
+}
+
 model User {
   id            String     @id @default(uuid()) @db.Uuid
   phone         String     @unique
@@ -94,14 +99,17 @@ model User {
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
 
-  profile            Profile?
-  devices            Device[]
-  sessions           Session[]
-  phoneVerifications PhoneVerification[]
-  listings           Listing[]
-  favorites          Favorite[]
-  notifications      Notification[]
-  reportsFiled       Report[]            @relation("ReportAuthor")
+  profile              Profile?
+  devices              Device[]
+  sessions             Session[]
+  phoneVerifications   PhoneVerification[]
+  listings             Listing[]
+  favorites            Favorite[]
+  notifications        Notification[]
+  reportsFiled         Report[]                  @relation("ReportAuthor")
+  conversationsStarted Conversation[]            @relation("ConversationInterested")
+  participations       ConversationParticipant[]
+  messages             Message[]
 
   @@index([status])
   @@map("users")
@@ -210,11 +218,12 @@ model Listing {
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
 
-  seller    User           @relation(fields: [sellerId], references: [id], onDelete: Cascade)
-  category  Category       @relation(fields: [categoryId], references: [id])
-  media     ListingMedia[]
-  favorites Favorite[]
-  location  Location?
+  seller        User           @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  category      Category       @relation(fields: [categoryId], references: [id])
+  media         ListingMedia[]
+  favorites     Favorite[]
+  location      Location?
+  conversations Conversation[]
 
   @@index([status, publishedAt(sort: Desc)])
   @@index([categoryId, status])
@@ -242,9 +251,9 @@ model ListingMedia {
 /// Exact coordinates stay private; `publicLatitude`/`publicLongitude` are snapped
 /// to a coarse grid and are the only ones the public API is allowed to return.
 model Location {
-  id              String                                @id @default(uuid()) @db.Uuid
-  listingId       String                                @unique @db.Uuid
-  country         String                                @default("SN")
+  id              String                                 @id @default(uuid()) @db.Uuid
+  listingId       String                                 @unique @db.Uuid
+  country         String                                 @default("SN")
   region          String?
   city            String?
   district        String?
@@ -254,8 +263,8 @@ model Location {
   publicLatitude  Float
   publicLongitude Float
   geom            Unsupported("geography(Point, 4326)")?
-  createdAt       DateTime                              @default(now())
-  updatedAt       DateTime                              @updatedAt
+  createdAt       DateTime                               @default(now())
+  updatedAt       DateTime                               @updatedAt
 
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 
@@ -329,4 +338,55 @@ model Campaign {
 
   @@index([status, startsAt])
   @@map("campaigns")
+}
+
+/// One conversation per listing and interested member. The listing owner is the
+/// other participant; the pair is kept in `participants` so access checks
+/// have one home. `interestedId` is denormalised only for the
+/// unique constraint, which is what makes concurrent contact requests converge.
+model Conversation {
+  id             String   @id @default(uuid()) @db.Uuid
+  listingId      String   @db.Uuid
+  interestedId   String   @db.Uuid
+  lastActivityAt DateTime @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  listing      Listing                   @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  interested   User                      @relation("ConversationInterested", fields: [interestedId], references: [id], onDelete: Cascade)
+  participants ConversationParticipant[]
+  messages     Message[]
+
+  @@unique([listingId, interestedId])
+  @@index([lastActivityAt(sort: Desc), id(sort: Desc)])
+  @@map("conversations")
+}
+
+model ConversationParticipant {
+  id             String                      @id @default(uuid()) @db.Uuid
+  conversationId String                      @db.Uuid
+  userId         String                      @db.Uuid
+  role           ConversationParticipantRole
+  createdAt      DateTime                    @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([conversationId, userId])
+  @@index([userId])
+  @@map("conversation_participants")
+}
+
+model Message {
+  id             String   @id @default(uuid()) @db.Uuid
+  conversationId String   @db.Uuid
+  senderId       String   @db.Uuid
+  body           String
+  createdAt      DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt(sort: Desc), id(sort: Desc)])
+  @@map("messages")
 }

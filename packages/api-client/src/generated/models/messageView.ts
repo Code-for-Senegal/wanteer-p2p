@@ -5,8 +5,11 @@
  * Local commerce and exchange platform
  * OpenAPI spec version: 1.0
  */
-import type { ReviewReportDtoStatus } from './reviewReportDtoStatus.js';
 
-export interface ReviewReportDto {
-  status: ReviewReportDtoStatus;
+export interface MessageView {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  body: string;
+  createdAt: string;
 }

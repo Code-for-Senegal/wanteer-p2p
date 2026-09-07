@@ -9,6 +9,7 @@ import { requiresPrice, type ListingType } from '@wantere/types';
 import { PrismaService } from '../../database/prisma.service';
 import { StorageService } from '../../infrastructure/storage/storage.service';
 import { LocationsService } from '../locations/locations.service';
+import { toPublicMember } from '../users/public-member';
 import { paginate, type PaginationQueryDto } from '../../common/dto/pagination.dto';
 import { ListingSearchRepository } from './listings.repository';
 import type { CreateListingDto } from './dto/create-listing.dto';
@@ -141,14 +142,7 @@ export class ListingsService {
         url: this.storage.publicUrl(media.storageKey),
         sortOrder: media.sortOrder,
       })),
-      seller: {
-        id: listing.seller.id,
-        displayName: listing.seller.profile?.displayName ?? 'Membre Wantere',
-        avatarUrl: listing.seller.profile?.avatarKey
-          ? this.storage.publicUrl(listing.seller.profile.avatarKey)
-          : null,
-        memberSince: listing.seller.createdAt.toISOString(),
-      },
+      seller: toPublicMember(listing.seller, (key) => this.storage.publicUrl(key)),
     };
   }
 

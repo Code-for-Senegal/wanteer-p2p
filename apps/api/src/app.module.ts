@@ -16,6 +16,7 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { AuthModule } from './modules/auth/auth.module';
 import { CategoriesModule } from './modules/categories/categories.module';
+import { ConversationsModule } from './modules/conversations/conversations.module';
 import { FavoritesModule } from './modules/favorites/favorites.module';
 import { HealthModule } from './modules/health/health.module';
 import { ListingsModule } from './modules/listings/listings.module';
@@ -73,6 +74,7 @@ const LOG_LEVELS = {
     CategoriesModule,
     ListingsModule,
     FavoritesModule,
+    ConversationsModule,
     ReportsModule,
     NotificationsModule,
   ],

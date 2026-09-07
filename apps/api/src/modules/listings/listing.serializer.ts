@@ -1,4 +1,5 @@
 import type { PublicLocation } from '@wantere/types';
+import type { PublicMember } from '../users/public-member';
 
 export interface ListingSummary {
   id: string;
@@ -20,5 +21,5 @@ export interface ListingDetail extends ListingSummary {
   description: string;
   viewCount: number;
   media: { id: string; url: string; sortOrder: number }[];
-  seller: { id: string; displayName: string; avatarUrl: string | null; memberSince: string };
+  seller: PublicMember;
 }

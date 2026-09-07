@@ -5,8 +5,10 @@
  * Local commerce and exchange platform
  * OpenAPI spec version: 1.0
  */
-import type { ReviewReportDtoStatus } from './reviewReportDtoStatus.js';
 
-export interface ReviewReportDto {
-  status: ReviewReportDtoStatus;
+export interface PageMetaDto {
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
 }
