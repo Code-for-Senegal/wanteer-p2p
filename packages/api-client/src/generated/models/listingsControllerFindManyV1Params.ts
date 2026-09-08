@@ -5,9 +5,9 @@
  * Local commerce and exchange platform
  * OpenAPI spec version: 1.0
  */
-import type { ListingsControllerFindManyV1Condition } from './listingsControllerFindManyV1Condition';
-import type { ListingsControllerFindManyV1Sort } from './listingsControllerFindManyV1Sort';
-import type { ListingsControllerFindManyV1Type } from './listingsControllerFindManyV1Type';
+import type { ListingsControllerFindManyV1Condition } from './listingsControllerFindManyV1Condition.js';
+import type { ListingsControllerFindManyV1Sort } from './listingsControllerFindManyV1Sort.js';
+import type { ListingsControllerFindManyV1Type } from './listingsControllerFindManyV1Type.js';
 
 export type ListingsControllerFindManyV1Params = {
 /**

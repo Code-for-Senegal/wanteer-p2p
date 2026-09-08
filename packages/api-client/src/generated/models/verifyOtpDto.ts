@@ -5,7 +5,7 @@
  * Local commerce and exchange platform
  * OpenAPI spec version: 1.0
  */
-import type { VerifyOtpDtoPlatform } from './verifyOtpDtoPlatform';
+import type { VerifyOtpDtoPlatform } from './verifyOtpDtoPlatform.js';
 
 export interface VerifyOtpDto {
   phone: string;

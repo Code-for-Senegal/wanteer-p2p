@@ -8,34 +8,43 @@
 import type {
   AddFavoriteDto,
   AuthTokensDto,
-  CategoriesControllerFindBySlugV1200,
-  CategoriesControllerTreeV1200Item,
+  CategoryDetailDto,
+  CategoryDto,
+  CategoryNode,
   CreateCategoryDto,
   CreateListingDto,
   CreateReportDto,
+  FavoriteCreatedDto,
   FavoritesControllerListV1Params,
-  HealthControllerReady200,
-  HealthControllerReady503,
-  ListingsControllerCreateV1201,
+  HealthLiveDto,
+  HealthReadyDto,
+  ListingDetail,
   ListingsControllerFindManyV1Params,
   ListingsControllerFindMineV1Params,
-  ListingsControllerFindOneV1200,
-  ListingsControllerUpdateV1200,
   LoginDto,
   NotificationsControllerListV1Params,
   OtpChallengeDto,
+  PaginatedFavoriteItemDto,
+  PaginatedListingSummaryDto,
+  PaginatedNotificationDto,
+  PaginatedReportDto,
+  ProfileDto,
+  PublicProfileDto,
   RefreshDto,
   RegisterDto,
+  ReportCreatedDto,
+  ReportDto,
   ReportsControllerListV1Params,
   ReviewReportDto,
   SessionUserDto,
+  UnreadCountDto,
   UpdateCategoryDto,
   UpdateListingDto,
   UpdateProfileDto,
   VerifyOtpDto
 } from './models';
 
-import { request } from '../http-client';
+import { request } from '../http-client.js';
 
 export type authControllerRegisterV1Response200 = {
   data: OtpChallengeDto
@@ -278,7 +287,7 @@ export const authControllerMeV1 = async ( options?: Parameters<typeof request>[1
 
 
 export type healthControllerLiveResponse200 = {
-  data: void
+  data: HealthLiveDto
   status: 200
 }
 
@@ -314,12 +323,12 @@ export const healthControllerLive = async ( options?: Parameters<typeof request>
 
 
 export type healthControllerReadyResponse200 = {
-  data: HealthControllerReady200
+  data: HealthReadyDto
   status: 200
 }
 
 export type healthControllerReadyResponse503 = {
-  data: HealthControllerReady503
+  data: HealthReadyDto
   status: 503
 }
 
@@ -357,7 +366,7 @@ export const healthControllerReady = async ( options?: Parameters<typeof request
 
 
 export type usersControllerFindOneV1Response200 = {
-  data: void
+  data: PublicProfileDto
   status: 200
 }
 
@@ -393,7 +402,7 @@ export const usersControllerFindOneV1 = async (id: string, options?: Parameters<
 
 
 export type profilesControllerFindV1Response200 = {
-  data: void
+  data: ProfileDto
   status: 200
 }
 
@@ -429,7 +438,7 @@ export const profilesControllerFindV1 = async ( options?: Parameters<typeof requ
 
 
 export type profilesControllerUpdateV1Response200 = {
-  data: void
+  data: ProfileDto
   status: 200
 }
 
@@ -471,7 +480,7 @@ return request<profilesControllerUpdateV1Response>(getProfilesControllerUpdateV1
 
 
 export type categoriesControllerTreeV1Response200 = {
-  data: CategoriesControllerTreeV1200Item[]
+  data: CategoryNode[]
   status: 200
 }
 
@@ -507,7 +516,7 @@ export const categoriesControllerTreeV1 = async ( options?: Parameters<typeof re
 
 
 export type categoriesControllerCreateV1Response201 = {
-  data: void
+  data: CategoryDto
   status: 201
 }
 
@@ -549,7 +558,7 @@ return request<categoriesControllerCreateV1Response>(getCategoriesControllerCrea
 
 
 export type categoriesControllerFindBySlugV1Response200 = {
-  data: CategoriesControllerFindBySlugV1200
+  data: CategoryDetailDto
   status: 200
 }
 
@@ -585,7 +594,7 @@ export const categoriesControllerFindBySlugV1 = async (slug: string, options?: P
 
 
 export type categoriesControllerUpdateV1Response200 = {
-  data: void
+  data: CategoryDto
   status: 200
 }
 
@@ -628,7 +637,7 @@ return request<categoriesControllerUpdateV1Response>(getCategoriesControllerUpda
 
 
 export type listingsControllerFindManyV1Response200 = {
-  data: void
+  data: PaginatedListingSummaryDto
   status: 200
 }
 
@@ -671,7 +680,7 @@ export const listingsControllerFindManyV1 = async (params?: ListingsControllerFi
 
 
 export type listingsControllerCreateV1Response201 = {
-  data: ListingsControllerCreateV1201
+  data: ListingDetail
   status: 201
 }
 
@@ -713,7 +722,7 @@ return request<listingsControllerCreateV1Response>(getListingsControllerCreateV1
 
 
 export type listingsControllerFindMineV1Response200 = {
-  data: void
+  data: PaginatedListingSummaryDto
   status: 200
 }
 
@@ -756,7 +765,7 @@ export const listingsControllerFindMineV1 = async (params?: ListingsControllerFi
 
 
 export type listingsControllerFindOneV1Response200 = {
-  data: ListingsControllerFindOneV1200
+  data: ListingDetail
   status: 200
 }
 
@@ -792,7 +801,7 @@ export const listingsControllerFindOneV1 = async (id: string, options?: Paramete
 
 
 export type listingsControllerUpdateV1Response200 = {
-  data: ListingsControllerUpdateV1200
+  data: ListingDetail
   status: 200
 }
 
@@ -871,7 +880,7 @@ export const listingsControllerArchiveV1 = async (id: string, options?: Paramete
 
 
 export type favoritesControllerListV1Response200 = {
-  data: void
+  data: PaginatedFavoriteItemDto
   status: 200
 }
 
@@ -914,7 +923,7 @@ export const favoritesControllerListV1 = async (params?: FavoritesControllerList
 
 
 export type favoritesControllerAddV1Response201 = {
-  data: void
+  data: FavoriteCreatedDto
   status: 201
 }
 
@@ -992,7 +1001,7 @@ export const favoritesControllerRemoveV1 = async (listingId: string, options?: P
 
 
 export type reportsControllerCreateV1Response201 = {
-  data: void
+  data: ReportCreatedDto
   status: 201
 }
 
@@ -1034,7 +1043,7 @@ return request<reportsControllerCreateV1Response>(getReportsControllerCreateV1Ur
 
 
 export type reportsControllerListV1Response200 = {
-  data: void
+  data: PaginatedReportDto
   status: 200
 }
 
@@ -1077,7 +1086,7 @@ export const reportsControllerListV1 = async (params?: ReportsControllerListV1Pa
 
 
 export type reportsControllerReviewV1Response200 = {
-  data: void
+  data: ReportDto
   status: 200
 }
 
@@ -1120,7 +1129,7 @@ return request<reportsControllerReviewV1Response>(getReportsControllerReviewV1Ur
 
 
 export type notificationsControllerListV1Response200 = {
-  data: void
+  data: PaginatedNotificationDto
   status: 200
 }
 
@@ -1163,7 +1172,7 @@ export const notificationsControllerListV1 = async (params?: NotificationsContro
 
 
 export type notificationsControllerUnreadCountV1Response200 = {
-  data: void
+  data: UnreadCountDto
   status: 200
 }
 

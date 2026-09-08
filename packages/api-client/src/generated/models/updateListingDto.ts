@@ -5,8 +5,8 @@
  * Local commerce and exchange platform
  * OpenAPI spec version: 1.0
  */
-import type { UpdateListingDtoCondition } from './updateListingDtoCondition';
-import type { UpdateListingDtoStatus } from './updateListingDtoStatus';
+import type { UpdateListingDtoCondition } from './updateListingDtoCondition.js';
+import type { UpdateListingDtoStatus } from './updateListingDtoStatus.js';
 
 export interface UpdateListingDto {
   /**

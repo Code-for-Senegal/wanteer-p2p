@@ -6,10 +6,12 @@
  * OpenAPI spec version: 1.0
  */
 
-export type HealthControllerReady200Status = typeof HealthControllerReady200Status[keyof typeof HealthControllerReady200Status];
+export type HealthReadyDtoStatus = typeof HealthReadyDtoStatus[keyof typeof HealthReadyDtoStatus];
 
 
-export const HealthControllerReady200Status = {
+export const HealthReadyDtoStatus = {
   ok: 'ok',
+  error: 'error',
   degraded: 'degraded',
+  shutting_down: 'shutting_down',
 } as const;

@@ -182,7 +182,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthLiveDto"
+                }
+              }
+            }
           }
         },
         "summary": "Liveness probe",
@@ -197,226 +204,21 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "The Health Check is successful",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "enum": [
-                        "ok",
-                        "degraded"
-                      ],
-                      "example": "ok"
-                    },
-                    "info": {
-                      "type": "object",
-                      "example": {
-                        "database": {
-                          "status": "up",
-                          "responseTime": 12
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string",
-                            "enum": [
-                              "up",
-                              "degraded",
-                              "down"
-                            ]
-                          },
-                          "responseTime": {
-                            "type": "number",
-                            "description": "Time the health indicator took to respond, in ms"
-                          }
-                        },
-                        "additionalProperties": true
-                      },
-                      "nullable": true
-                    },
-                    "error": {
-                      "type": "object",
-                      "example": {},
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string",
-                            "enum": [
-                              "up",
-                              "degraded",
-                              "down"
-                            ]
-                          },
-                          "responseTime": {
-                            "type": "number",
-                            "description": "Time the health indicator took to respond, in ms"
-                          }
-                        },
-                        "additionalProperties": true
-                      },
-                      "nullable": true
-                    },
-                    "details": {
-                      "type": "object",
-                      "example": {
-                        "database": {
-                          "status": "up",
-                          "responseTime": 12
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string",
-                            "enum": [
-                              "up",
-                              "degraded",
-                              "down"
-                            ]
-                          },
-                          "responseTime": {
-                            "type": "number",
-                            "description": "Time the health indicator took to respond, in ms"
-                          }
-                        },
-                        "additionalProperties": true
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/HealthReadyDto"
                 }
               }
             }
           },
           "503": {
-            "description": "The Health Check is not successful",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "enum": [
-                        "error",
-                        "shutting_down"
-                      ],
-                      "example": "error"
-                    },
-                    "info": {
-                      "type": "object",
-                      "example": {
-                        "database": {
-                          "status": "up",
-                          "responseTime": 12
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string",
-                            "enum": [
-                              "up",
-                              "degraded",
-                              "down"
-                            ]
-                          },
-                          "responseTime": {
-                            "type": "number",
-                            "description": "Time the health indicator took to respond, in ms"
-                          }
-                        },
-                        "additionalProperties": true
-                      },
-                      "nullable": true
-                    },
-                    "error": {
-                      "type": "object",
-                      "example": {
-                        "redis": {
-                          "status": "down",
-                          "message": "Could not connect",
-                          "responseTime": 3005
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string",
-                            "enum": [
-                              "up",
-                              "degraded",
-                              "down"
-                            ]
-                          },
-                          "responseTime": {
-                            "type": "number",
-                            "description": "Time the health indicator took to respond, in ms"
-                          }
-                        },
-                        "additionalProperties": true
-                      },
-                      "nullable": true
-                    },
-                    "details": {
-                      "type": "object",
-                      "example": {
-                        "database": {
-                          "status": "up",
-                          "responseTime": 12
-                        },
-                        "redis": {
-                          "status": "down",
-                          "message": "Could not connect",
-                          "responseTime": 3005
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string",
-                            "enum": [
-                              "up",
-                              "degraded",
-                              "down"
-                            ]
-                          },
-                          "responseTime": {
-                            "type": "number",
-                            "description": "Time the health indicator took to respond, in ms"
-                          }
-                        },
-                        "additionalProperties": true
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/HealthReadyDto"
                 }
               }
             }
@@ -443,7 +245,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicProfileDto"
+                }
+              }
+            }
           }
         },
         "summary": "Public profile of a member",
@@ -458,7 +267,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -486,7 +302,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -512,7 +335,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/CategoryNode"
                   }
                 }
               }
@@ -539,7 +362,14 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -572,7 +402,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/CategoryDetailDto"
                 }
               }
             }
@@ -609,7 +439,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -758,7 +595,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedListingSummaryDto"
+                }
+              }
+            }
           }
         },
         "summary": "Search active listings",
@@ -785,7 +629,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/ListingDetail"
                 }
               }
             }
@@ -830,7 +674,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedListingSummaryDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -863,7 +714,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/ListingDetail"
                 }
               }
             }
@@ -902,7 +753,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/ListingDetail"
                 }
               }
             }
@@ -974,7 +825,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedFavoriteItemDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1002,7 +860,14 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FavoriteCreatedDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1061,7 +926,14 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportCreatedDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1101,7 +973,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedReportDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1140,7 +1019,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1182,7 +1068,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedNotificationDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1202,7 +1095,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnreadCountDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1430,6 +1330,160 @@
           "avatarUrl"
         ]
       },
+      "HealthLiveDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "ok"
+          },
+          "uptime": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "status",
+          "uptime"
+        ]
+      },
+      "HealthIndicatorStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "up",
+              "degraded",
+              "down"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "HealthIndicatorsDto": {
+        "type": "object",
+        "properties": {
+          "database": {
+            "$ref": "#/components/schemas/HealthIndicatorStatusDto"
+          },
+          "redis": {
+            "$ref": "#/components/schemas/HealthIndicatorStatusDto"
+          }
+        },
+        "required": [
+          "database",
+          "redis"
+        ]
+      },
+      "HealthReadyDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "error",
+              "degraded",
+              "shutting_down"
+            ]
+          },
+          "info": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/HealthIndicatorsDto"
+              }
+            ]
+          },
+          "error": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/HealthIndicatorsDto"
+              }
+            ]
+          },
+          "details": {
+            "$ref": "#/components/schemas/HealthIndicatorsDto"
+          }
+        },
+        "required": [
+          "status",
+          "details"
+        ]
+      },
+      "PublicProfileDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "bio": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "avatarUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "memberSince": {
+            "type": "string"
+          },
+          "activeListings": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "displayName",
+          "bio",
+          "city",
+          "avatarUrl",
+          "memberSince",
+          "activeListings"
+        ]
+      },
+      "ProfileDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "bio": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "avatarUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "displayName",
+          "bio",
+          "city",
+          "avatarUrl"
+        ]
+      },
       "UpdateProfileDto": {
         "type": "object",
         "properties": {
@@ -1451,6 +1505,142 @@
             "maxLength": 255
           }
         }
+      },
+      "CategoryNode": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string",
+            "nullable": true
+          },
+          "sortOrder": {
+            "type": "number"
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CategoryNode"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "icon",
+          "sortOrder",
+          "children"
+        ]
+      },
+      "CategoryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "parentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string",
+            "nullable": true
+          },
+          "sortOrder": {
+            "type": "number"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "parentId",
+          "name",
+          "slug",
+          "icon",
+          "sortOrder",
+          "active",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "CategoryDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "parentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string",
+            "nullable": true
+          },
+          "sortOrder": {
+            "type": "number"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CategoryDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "parentId",
+          "name",
+          "slug",
+          "icon",
+          "sortOrder",
+          "active",
+          "createdAt",
+          "updatedAt",
+          "children"
+        ]
       },
       "CreateCategoryDto": {
         "type": "object",
@@ -1500,6 +1690,287 @@
             "type": "boolean"
           }
         }
+      },
+      "PageMetaDto": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number"
+          },
+          "pageSize": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "page",
+          "pageSize",
+          "total",
+          "totalPages"
+        ]
+      },
+      "PublicLocationDto": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "country": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "district": {
+            "type": "string",
+            "nullable": true
+          },
+          "displayName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude",
+          "country",
+          "region",
+          "city",
+          "district",
+          "displayName"
+        ]
+      },
+      "ListingSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "condition": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string"
+          },
+          "categoryId": {
+            "type": "string"
+          },
+          "coverUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "location": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PublicLocationDto"
+              }
+            ]
+          },
+          "distanceMeters": {
+            "type": "number",
+            "nullable": true
+          },
+          "publishedAt": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "type",
+          "status",
+          "condition",
+          "price",
+          "currency",
+          "categoryId",
+          "coverUrl",
+          "location",
+          "distanceMeters",
+          "publishedAt",
+          "createdAt"
+        ]
+      },
+      "PaginatedListingSummaryDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ListingSummary"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/PageMetaDto"
+          }
+        },
+        "required": [
+          "items",
+          "meta"
+        ]
+      },
+      "ListingMediaDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "sortOrder": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "url",
+          "sortOrder"
+        ]
+      },
+      "ListingSellerDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "memberSince": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "displayName",
+          "avatarUrl",
+          "memberSince"
+        ]
+      },
+      "ListingDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "condition": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string"
+          },
+          "categoryId": {
+            "type": "string"
+          },
+          "coverUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "location": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PublicLocationDto"
+              }
+            ]
+          },
+          "distanceMeters": {
+            "type": "number",
+            "nullable": true
+          },
+          "publishedAt": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "viewCount": {
+            "type": "number"
+          },
+          "media": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ListingMediaDto"
+            }
+          },
+          "seller": {
+            "$ref": "#/components/schemas/ListingSellerDto"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "type",
+          "status",
+          "condition",
+          "price",
+          "currency",
+          "categoryId",
+          "coverUrl",
+          "location",
+          "distanceMeters",
+          "publishedAt",
+          "createdAt",
+          "description",
+          "viewCount",
+          "media",
+          "seller"
+        ]
       },
       "CreateListingDto": {
         "type": "object",
@@ -1637,6 +2108,76 @@
           }
         }
       },
+      "FavoriteListingDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "coverUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "price",
+          "currency",
+          "status",
+          "coverUrl"
+        ]
+      },
+      "FavoriteItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "listing": {
+            "$ref": "#/components/schemas/FavoriteListingDto"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "listing"
+        ]
+      },
+      "PaginatedFavoriteItemDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FavoriteItemDto"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/PageMetaDto"
+          }
+        },
+        "required": [
+          "items",
+          "meta"
+        ]
+      },
       "AddFavoriteDto": {
         "type": "object",
         "properties": {
@@ -1646,6 +2187,25 @@
         },
         "required": [
           "listingId"
+        ]
+      },
+      "FavoriteCreatedDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "listingId": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "listingId",
+          "createdAt"
         ]
       },
       "CreateReportDto": {
@@ -1685,6 +2245,125 @@
           "reason"
         ]
       },
+      "ReportCreatedDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "OPEN",
+              "UNDER_REVIEW",
+              "RESOLVED",
+              "DISMISSED"
+            ],
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "createdAt"
+        ]
+      },
+      "ReportDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "reporterId": {
+            "type": "string"
+          },
+          "targetType": {
+            "enum": [
+              "USER",
+              "LISTING"
+            ],
+            "type": "string"
+          },
+          "targetId": {
+            "type": "string"
+          },
+          "reason": {
+            "enum": [
+              "FRAUD",
+              "SPAM",
+              "PROHIBITED_ITEM",
+              "HARASSMENT",
+              "MISLEADING",
+              "DUPLICATE",
+              "OTHER"
+            ],
+            "type": "string"
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "enum": [
+              "OPEN",
+              "UNDER_REVIEW",
+              "RESOLVED",
+              "DISMISSED"
+            ],
+            "type": "string"
+          },
+          "reviewedAt": {
+            "type": "string",
+            "nullable": true,
+            "format": "date-time"
+          },
+          "reviewedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "reporterId",
+          "targetType",
+          "targetId",
+          "reason",
+          "comment",
+          "status",
+          "reviewedAt",
+          "reviewedBy",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "PaginatedReportDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReportDto"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/PageMetaDto"
+          }
+        },
+        "required": [
+          "items",
+          "meta"
+        ]
+      },
       "ReviewReportDto": {
         "type": "object",
         "properties": {
@@ -1698,6 +2377,107 @@
         },
         "required": [
           "status"
+        ]
+      },
+      "NotificationDataDto": {
+        "type": "object",
+        "properties": {
+          "listingId": {
+            "type": "string"
+          }
+        }
+      },
+      "NotificationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "channel": {
+            "enum": [
+              "IN_APP",
+              "PUSH",
+              "EMAIL",
+              "SMS"
+            ],
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "data": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NotificationDataDto"
+              }
+            ]
+          },
+          "readAt": {
+            "type": "string",
+            "nullable": true,
+            "format": "date-time"
+          },
+          "sentAt": {
+            "type": "string",
+            "nullable": true,
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "userId",
+          "channel",
+          "type",
+          "title",
+          "body",
+          "data",
+          "readAt",
+          "sentAt",
+          "createdAt"
+        ]
+      },
+      "PaginatedNotificationDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NotificationDto"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/PageMetaDto"
+          }
+        },
+        "required": [
+          "items",
+          "meta"
+        ]
+      },
+      "UnreadCountDto": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "count"
         ]
       }
     }

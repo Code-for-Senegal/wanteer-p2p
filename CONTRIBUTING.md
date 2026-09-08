@@ -41,6 +41,11 @@ pnpm api:generate
   already says.
 - Public API responses must never expose a member's exact location, phone
   number or internal moderation state.
+- A new endpoint is not done until its response is declared with
+  `@ApiOkResponse`, `@ApiCreatedResponse` or `@ApiNoContentResponse` and a
+  class decorated with `@ApiProperty`. Interfaces are invisible to Swagger.
+  Paginated lists use `ApiPaginatedResponse(ItemDto)`. Then run
+  `pnpm api:generate`.
 
 ## Database changes
 

@@ -6,4 +6,6 @@
  * OpenAPI spec version: 1.0
  */
 
-export type ListingsControllerFindOneV1200 = { [key: string]: unknown };
+export interface NotificationDataDto {
+  listingId?: string;
+}

@@ -6,4 +6,8 @@
  * OpenAPI spec version: 1.0
  */
 
-export type ListingsControllerUpdateV1200 = { [key: string]: unknown };
+export interface ListingMediaDto {
+  id: string;
+  url: string;
+  sortOrder: number;
+}

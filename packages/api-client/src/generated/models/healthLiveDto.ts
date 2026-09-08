@@ -6,4 +6,7 @@
  * OpenAPI spec version: 1.0
  */
 
-export type CategoriesControllerFindBySlugV1200 = { [key: string]: unknown };
+export interface HealthLiveDto {
+  status: string;
+  uptime: number;
+}

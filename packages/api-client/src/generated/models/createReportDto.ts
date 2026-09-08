@@ -5,8 +5,8 @@
  * Local commerce and exchange platform
  * OpenAPI spec version: 1.0
  */
-import type { CreateReportDtoReason } from './createReportDtoReason';
-import type { CreateReportDtoTargetType } from './createReportDtoTargetType';
+import type { CreateReportDtoReason } from './createReportDtoReason.js';
+import type { CreateReportDtoTargetType } from './createReportDtoTargetType.js';
 
 export interface CreateReportDto {
   targetType: CreateReportDtoTargetType;
