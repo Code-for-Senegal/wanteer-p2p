@@ -8,10 +8,21 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
 import type { AuthenticatedUser } from '../../common/guards/jwt-auth.guard';
 import { PaginationQueryDto } from '../../common/dto/pagination.dto';
+import {
+  NotificationDto,
+  UnreadCountDto,
+} from './dto/notification-response.dto';
 import { NotificationsService } from './notifications.service';
 
 @ApiBearerAuth()
@@ -22,12 +33,17 @@ export class NotificationsController {
 
   @Get()
   @ApiOperation({ summary: 'Notification feed' })
-  list(@CurrentUser() user: AuthenticatedUser, @Query() query: PaginationQueryDto) {
+  @ApiPaginatedResponse(NotificationDto)
+  list(
+    @CurrentUser() user: AuthenticatedUser,
+    @Query() query: PaginationQueryDto,
+  ) {
     return this.notifications.list(user.id, query);
   }
 
   @Get('unread-count')
   @ApiOperation({ summary: 'Number of unread notifications' })
+  @ApiOkResponse({ type: UnreadCountDto })
   async unreadCount(@CurrentUser() user: AuthenticatedUser) {
     return { count: await this.notifications.unreadCount(user.id) };
   }
@@ -35,6 +51,7 @@ export class NotificationsController {
   @Post('read-all')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Mark every notification as read' })
+  @ApiNoContentResponse()
   markAllAsRead(@CurrentUser() user: AuthenticatedUser) {
     return this.notifications.markAllAsRead(user.id);
   }
@@ -42,7 +59,11 @@ export class NotificationsController {
   @Post(':id/read')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Mark one notification as read' })
-  markAsRead(@CurrentUser() user: AuthenticatedUser, @Param('id', ParseUUIDPipe) id: string) {
+  @ApiNoContentResponse()
+  markAsRead(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('id', ParseUUIDPipe) id: string,
+  ) {
     return this.notifications.markAsRead(user.id, id);
   }
 }

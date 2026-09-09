@@ -5,8 +5,8 @@
  * Local commerce and exchange platform
  * OpenAPI spec version: 1.0
  */
-import type { CreateListingDtoCondition } from './createListingDtoCondition';
-import type { CreateListingDtoType } from './createListingDtoType';
+import type { CreateListingDtoCondition } from './createListingDtoCondition.js';
+import type { CreateListingDtoType } from './createListingDtoType.js';
 
 export interface CreateListingDto {
   /**

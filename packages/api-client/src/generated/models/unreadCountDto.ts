@@ -6,4 +6,6 @@
  * OpenAPI spec version: 1.0
  */
 
-export type ListingsControllerCreateV1201 = { [key: string]: unknown };
+export interface UnreadCountDto {
+  count: number;
+}

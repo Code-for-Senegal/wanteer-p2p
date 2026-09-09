@@ -6,10 +6,10 @@
  * OpenAPI spec version: 1.0
  */
 
-export type HealthControllerReady503DetailsStatus = typeof HealthControllerReady503DetailsStatus[keyof typeof HealthControllerReady503DetailsStatus];
+export type HealthIndicatorStatusDtoStatus = typeof HealthIndicatorStatusDtoStatus[keyof typeof HealthIndicatorStatusDtoStatus];
 
 
-export const HealthControllerReady503DetailsStatus = {
+export const HealthIndicatorStatusDtoStatus = {
   up: 'up',
   degraded: 'degraded',
   down: 'down',
