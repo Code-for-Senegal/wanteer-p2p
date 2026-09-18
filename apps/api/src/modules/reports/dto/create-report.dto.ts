@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
-import { REPORT_REASONS, REPORT_TARGETS } from '@wantere/types';
+import { REPORT_REASONS, REPORT_TARGETS } from '@p2p-local/types';
 
 export class CreateReportDto {
   @ApiProperty({ enum: REPORT_TARGETS })

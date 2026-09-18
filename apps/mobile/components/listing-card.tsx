@@ -1,26 +1,33 @@
 import { Link } from 'expo-router';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { colors, fontSize, radius, spacing } from '@wantere/design-tokens';
-import { formatPrice } from '@/lib/format';
-import type { ListingSummary } from '@/features/listings/use-listings';
+import { Image } from 'expo-image';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { neighborhoodName } from '@p2p-local/config';
+import { colors, fontSize, radius, spacing } from '@p2p-local/design-tokens';
+import { formatAge, formatListingBadge } from '@/lib/format';
+import { photoUri } from '@/lib/photos';
+import type { LocalListing } from '@/features/listings/listing.types';
 
-export function ListingCard({ listing }: { listing: ListingSummary }) {
+export function ListingCard({ listing }: { listing: LocalListing }) {
+  const completed = listing.status === 'COMPLETED';
+
   return (
     <Link href={{ pathname: '/listing/[id]', params: { id: listing.id } }} asChild>
-      <Pressable style={styles.card}>
+      <Pressable style={[styles.card, completed && styles.completed]}>
         <View style={styles.thumbnail}>
-          {listing.coverUrl ? (
-            <Image source={{ uri: listing.coverUrl }} style={styles.image} />
+          {listing.photoFileName ? (
+            <Image source={{ uri: photoUri(listing.photoFileName) }} style={styles.image} />
           ) : null}
         </View>
         <View style={styles.body}>
           <Text numberOfLines={2} style={styles.title}>
             {listing.title}
           </Text>
-          <Text style={styles.price}>{formatPrice(listing.price, listing.type)}</Text>
-          {listing.location ? (
-            <Text style={styles.location}>{listing.location.displayName}</Text>
-          ) : null}
+          <Text style={styles.badge}>
+            {completed ? 'Complété' : formatListingBadge(listing.type, listing.price)}
+          </Text>
+          <Text style={styles.meta}>
+            {neighborhoodName(listing.neighborhoodId)} · {formatAge(listing.createdAt)}
+          </Text>
         </View>
       </Pressable>
     </Link>
@@ -37,6 +44,7 @@ const styles = StyleSheet.create({
     borderColor: colors.neutral[200],
     padding: spacing[3],
   },
+  completed: { opacity: 0.55 },
   thumbnail: {
     width: 88,
     height: 88,
@@ -47,6 +55,6 @@ const styles = StyleSheet.create({
   image: { width: '100%', height: '100%' },
   body: { flex: 1, gap: spacing[1] },
   title: { fontSize: fontSize.base, fontWeight: '500', color: colors.neutral[900] },
-  price: { fontSize: fontSize.base, fontWeight: '600', color: colors.brand[600] },
-  location: { fontSize: fontSize.xs, color: colors.neutral[500] },
+  badge: { fontSize: fontSize.sm, fontWeight: '600', color: colors.brand[600] },
+  meta: { fontSize: fontSize.xs, color: colors.neutral[500] },
 });

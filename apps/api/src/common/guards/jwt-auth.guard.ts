@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import type { Request } from 'express';
-import type { UserRole } from '@wantere/types';
+import type { UserRole } from '@p2p-local/types';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 
 export interface AuthenticatedUser {

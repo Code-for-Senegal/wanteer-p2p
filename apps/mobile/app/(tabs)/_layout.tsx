@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { colors } from '@wantere/design-tokens';
+import { colors } from '@p2p-local/design-tokens';
 
 export default function TabsLayout() {
   return (
@@ -11,9 +11,9 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen name="index" options={{ title: 'Accueil' }} />
-      <Tabs.Screen name="search" options={{ title: 'Recherche' }} />
-      <Tabs.Screen name="favorites" options={{ title: 'Favoris' }} />
-      <Tabs.Screen name="profile" options={{ title: 'Profil' }} />
+      <Tabs.Screen name="echanges" options={{ title: 'Mes annonces' }} />
+      <Tabs.Screen name="campagne" options={{ title: 'Campagne' }} />
+      <Tabs.Screen name="profil" options={{ title: 'Profil' }} />
     </Tabs>
   );
 }

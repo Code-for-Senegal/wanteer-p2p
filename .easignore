@@ -1,0 +1,6 @@
+# Trimmed from the EAS build upload. Never exclude a workspace package: EAS runs
+# `pnpm install --frozen-lockfile` at the root, and a missing package makes the
+# lockfile diverge (ERR_PNPM_OUTDATED_LOCKFILE).
+docs/
+docker/
+.github/

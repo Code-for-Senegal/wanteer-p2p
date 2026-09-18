@@ -9,15 +9,53 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  DATABASE_URL: postgresql://wantere:wantere@localhost:5432/wantere?schema=public
-  REDIS_URL: redis://localhost:6379
-  JWT_SECRET: ci-secret-value-that-is-long-enough-32
-  JWT_REFRESH_SECRET: ci-refresh-secret-long-enough-32-chars
-
 jobs:
-  quality:
+  mobile:
+    name: Mobile
     runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # `pnpm --filter` runs each package script directly, which bypasses the
+      # `dependsOn: ["^build"]` of turbo.json: the shared packages compile to
+      # dist/ and nothing would build them. Same list as the EAS hook.
+      - name: Build the shared packages
+        run: >-
+          pnpm exec turbo run build
+          --filter=@p2p-local/config --filter=@p2p-local/design-tokens
+          --filter=@p2p-local/types --filter=@p2p-local/validation
+
+      - run: pnpm --filter @p2p-local/mobile... lint
+
+      - run: pnpm --filter @p2p-local/mobile... typecheck
+
+      - run: pnpm --filter @p2p-local/mobile test
+
+      # Informative: expo-doctor reaches the Expo registry and reports drift in
+      # transitive versions we do not control.
+      - name: Check the Expo project
+        run: pnpm --filter @p2p-local/mobile exec expo-doctor
+        continue-on-error: true
+
+  api:
+    name: API
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: postgresql://wantere:wantere@localhost:5432/wantere?schema=public
+      REDIS_URL: redis://localhost:6379
+      JWT_SECRET: ci-secret-value-that-is-long-enough-32
+      JWT_REFRESH_SECRET: ci-refresh-secret-long-enough-32-chars
 
     services:
       postgres:
@@ -57,7 +95,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Apply database migrations
-        run: pnpm --filter @wantere/api db:deploy
+        run: pnpm --filter @p2p-local/api db:deploy
 
       - run: pnpm lint
 
@@ -66,6 +104,8 @@ jobs:
       - run: pnpm test
 
       - name: Run end-to-end tests
-        run: pnpm --filter @wantere/api test:e2e
+        run: pnpm --filter @p2p-local/api test:e2e
 
-      - run: pnpm build
+      # The mobile bundle is built by EAS, not here: `expo export` is slow and
+      # reaches the network for no verification CI does not already have.
+      - run: pnpm build --filter=!@p2p-local/mobile

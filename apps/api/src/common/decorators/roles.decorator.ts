@@ -1,5 +1,5 @@
 import { SetMetadata } from '@nestjs/common';
-import type { UserRole } from '@wantere/types';
+import type { UserRole } from '@p2p-local/types';
 
 export const ROLES_KEY = 'auth:roles';
 

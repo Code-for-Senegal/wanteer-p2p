@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import type { Request } from 'express';
-import type { UserRole } from '@wantere/types';
+import type { UserRole } from '@p2p-local/types';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 import type { AuthenticatedUser } from './jwt-auth.guard';
 

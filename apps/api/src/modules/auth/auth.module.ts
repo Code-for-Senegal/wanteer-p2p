@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { TOKENS } from '@wantere/config';
+import { TOKENS } from '@p2p-local/config';
 import type { Env } from '../../config/env';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';

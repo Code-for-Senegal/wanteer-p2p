@@ -1,5 +1,5 @@
 {
-  "name": "@wantere/validation",
+  "name": "@p2p-local/validation",
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
@@ -15,13 +15,13 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@wantere/config": "workspace:*",
-    "@wantere/types": "workspace:*",
+    "@p2p-local/config": "workspace:*",
+    "@p2p-local/types": "workspace:*",
     "zod": "^4.5.4"
   },
   "devDependencies": {
-    "@wantere/eslint-config": "workspace:*",
-    "@wantere/typescript-config": "workspace:*",
+    "@p2p-local/eslint-config": "workspace:*",
+    "@p2p-local/typescript-config": "workspace:*",
     "eslint": "^10.10.0",
     "typescript": "~6.0.3"
   }

@@ -1,7 +1,7 @@
 import { BadRequestException, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { randomInt } from 'node:crypto';
 import * as argon2 from 'argon2';
-import { OTP } from '@wantere/config';
+import { OTP } from '@p2p-local/config';
 import { PrismaService } from '../../database/prisma.service';
 import { RedisService } from '../../infrastructure/redis/redis.service';
 import { OTP_PROVIDER, type OtpProvider } from '../../infrastructure/otp/otp.provider';

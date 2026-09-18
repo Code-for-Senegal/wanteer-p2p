@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsInt, IsOptional, Max, Min } from 'class-validator';
-import { PAGINATION } from '@wantere/config';
+import { PAGINATION } from '@p2p-local/config';
 
 export class PaginationQueryDto {
   @ApiPropertyOptional({ minimum: 1, default: PAGINATION.defaultPage })

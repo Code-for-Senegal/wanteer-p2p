@@ -1,13 +1,65 @@
 # Architecture
 
+## V1: a local-first mobile application
+
+The V1 is `apps/mobile`, an Expo application that runs without a backend.
+Listings are written to the device, publishing asks for no account, and putting
+two people in touch is delegated to WhatsApp.
+
+This is a starting point, not an end state. It exists to get the product in
+front of a neighbourhood quickly, and it carries one heavy consequence that must
+stay visible: **a listing published on a device is not visible on any other
+device.** Sharing is what circulates a listing, not a feed.
+
+### The seam that makes it reversible
+
+Every read and write goes through `ListingRepository`, an interface in
+`apps/mobile/features/listings`. Its only implementation in V1 stores a JSON
+document in AsyncStorage. Three rules keep the seam useful:
+
+- every method is asynchronous, even those that would not need to be, so an HTTP
+  implementation substitutes without changing a signature;
+- filtering happens in the repository, never in a screen, because a filter is a
+  query string once a server answers;
+- no screen imports AsyncStorage. The repository is injected through a React
+  context, so switching to the API is one class and one line in the provider.
+
+### Listing ownership without accounts
+
+A listing carries an `ownerKey` generated at publication. Today the storage is
+already private to the device, so the key buys nothing — it is written now so
+that access control exists in the model and in the UI before a server needs it.
+
+Listings expire on their own after a fixed number of days, and completing one
+keeps it visible, greyed out, for 48 hours before it is archived. Deleting one
+removes its photo file as well.
+
+### Phone numbers
+
+The application never renders a phone number. It builds a `wa.me` link at the
+moment of the tap, with a message that names the listing so the recipient can
+tell where the contact comes from. A shared listing carries its title, its type
+and its district — never a number.
+
+### What comes next
+
+A backend restores what local-first cannot do: listings visible to others, an
+administration link that works from another screen, and light authentication.
+The section below describes the API that already exists for that purpose.
+
+## Backend, out of scope for the V1
+
+The code described from here on is implemented and tested in `apps/api`. **No
+client consumes it today.** It is kept because it is where the product goes once
+listings need to travel between phones.
+
 ## Shape of the system
 
-One API, three clients. `apps/api` is a NestJS modular monolith and owns every
-business rule; `apps/web`, `apps/mobile` and `apps/admin` consume its REST API
-through a client generated from its OpenAPI document.
+`apps/api` is a NestJS modular monolith and owns every business rule. Clients
+consume its REST API through a client generated from its OpenAPI document.
 
-There are no microservices, and there is no second backend hiding in Next.js
-server actions. A rule that matters lives in a Nest module, once.
+There are no microservices, and there is no second backend hiding in a server
+framework. A rule that matters lives in a Nest module, once.
 
 ## Why a modular monolith
 
@@ -98,6 +150,6 @@ domains.
 
 - No Clean Architecture ceremony, no CQRS, no event sourcing.
 - No generic repository, no base service, no interface per service.
-- No shared UI component library between React Native and the web: they share
-  tokens, not components.
+- No shared UI component library: the design tokens are shared, components are
+  not.
 - No pricing or monetisation logic.

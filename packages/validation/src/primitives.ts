@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PAGINATION } from '@wantere/config';
+import { PAGINATION } from '@p2p-local/config';
 
 export const phoneSchema = z
   .string()
@@ -30,3 +30,20 @@ export const paginationSchema = z.object({
 });
 
 export type PaginationInput = z.infer<typeof paginationSchema>;
+
+/**
+ * Senegalese mobile numbers as people type them.
+ *
+ * `phoneSchema` above is strict E.164, which nobody types: the number is given
+ * as "77 123 45 67". This accepts the common spellings and always returns
+ * E.164, so everything downstream stores one shape.
+ */
+export const senegalMobileSchema = z
+  .string()
+  .trim()
+  .transform((value) => value.replace(/[\s.-]/g, ''))
+  .refine(
+    (value) => /^(?:\+221)?7[05-8]\d{7}$/.test(value),
+    'Numéro de mobile sénégalais invalide',
+  )
+  .transform((value) => (value.startsWith('+221') ? value : `+221${value}`));

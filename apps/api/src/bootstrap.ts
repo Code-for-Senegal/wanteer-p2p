@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
 import helmet from 'helmet';
-import { API_VERSION } from '@wantere/config';
+import { API_VERSION } from '@p2p-local/config';
 import { AppModule } from './app.module';
 import type { Env } from './config/env';
 
@@ -27,7 +27,7 @@ export async function createApp(): Promise<INestApplication> {
 
 export function buildOpenApiDocument(app: INestApplication) {
   const config = new DocumentBuilder()
-    .setTitle('Wantere API')
+    .setTitle('P2P Local API')
     .setDescription('Local commerce and exchange platform')
     .setVersion('1.0')
     .addBearerAuth()

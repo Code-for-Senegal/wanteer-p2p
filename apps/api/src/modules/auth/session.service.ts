@@ -3,8 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { randomBytes } from 'node:crypto';
 import * as argon2 from 'argon2';
-import { TOKENS } from '@wantere/config';
-import type { UserRole } from '@wantere/types';
+import { TOKENS } from '@p2p-local/config';
+import type { UserRole } from '@p2p-local/types';
 import { PrismaService } from '../../database/prisma.service';
 import type { Env } from '../../config/env';
 

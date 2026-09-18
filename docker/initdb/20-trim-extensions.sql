@@ -1,4 +1,4 @@
--- The PostGIS image preinstalls topology and tiger_geocoder; Wantere uses
+-- The PostGIS image preinstalls topology and tiger_geocoder; P2P Local uses
 -- neither, and leaving them in place makes every `prisma migrate` report drift.
 DROP EXTENSION IF EXISTS postgis_tiger_geocoder CASCADE;
 DROP EXTENSION IF EXISTS postgis_topology CASCADE;

@@ -3,11 +3,8 @@ dist
 build
 coverage
 .turbo
-.next
-out
 .expo
 *.tsbuildinfo
-next-env.d.ts
 expo-env.d.ts
 apps/api/src/generated
 

@@ -4,8 +4,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { DEFAULT_CURRENCY } from '@wantere/config';
-import { requiresPrice, type ListingType } from '@wantere/types';
+import { DEFAULT_CURRENCY } from '@p2p-local/config';
+import { requiresPrice, type ListingType } from '@p2p-local/types';
 import { PrismaService } from '../../database/prisma.service';
 import { StorageService } from '../../infrastructure/storage/storage.service';
 import { LocationsService } from '../locations/locations.service';
@@ -143,7 +143,7 @@ export class ListingsService {
       })),
       seller: {
         id: listing.seller.id,
-        displayName: listing.seller.profile?.displayName ?? 'Membre Wantere',
+        displayName: listing.seller.profile?.displayName ?? 'Membre P2P Local',
         avatarUrl: listing.seller.profile?.avatarKey
           ? this.storage.publicUrl(listing.seller.profile.avatarKey)
           : null,

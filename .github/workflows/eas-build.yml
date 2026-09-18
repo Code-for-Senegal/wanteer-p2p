@@ -1,0 +1,45 @@
+name: EAS build
+
+# Manual only: a build consumes quota and takes 15 to 30 minutes, which makes it
+# unusable on every pull request.
+on:
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: Profil EAS
+        type: choice
+        options: [preview, production]
+        default: preview
+      platform:
+        description: Plateforme
+        type: choice
+        options: [android, ios, all]
+        default: android
+
+jobs:
+  build:
+    name: Build ${{ inputs.platform }} (${{ inputs.profile }})
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      # Requires an EXPO_TOKEN repository secret, created from an Expo access
+      # token that can build this project.
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Trigger the build
+        working-directory: apps/mobile
+        run: eas build --platform ${{ inputs.platform }} --profile ${{ inputs.profile }} --non-interactive --no-wait

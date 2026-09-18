@@ -15,8 +15,8 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { LISTING_LIMITS } from '@wantere/config';
-import { LISTING_CONDITIONS, LISTING_TYPES } from '@wantere/types';
+import { LISTING_LIMITS } from '@p2p-local/config';
+import { LISTING_CONDITIONS, LISTING_TYPES } from '@p2p-local/types';
 
 export class CreateListingDto {
   @ApiProperty()

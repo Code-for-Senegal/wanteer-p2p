@@ -12,5 +12,5 @@ labels: bug
 
 **Environment**
 
-- App: web / mobile / admin / api
+- App: mobile / api
 - Version or commit:

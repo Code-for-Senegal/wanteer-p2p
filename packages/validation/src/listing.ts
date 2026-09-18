@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { LISTING_LIMITS, SUPPORTED_CURRENCIES } from '@wantere/config';
-import { LISTING_CONDITIONS, LISTING_TYPES, LISTING_STATUSES, requiresPrice } from '@wantere/types';
+import { LISTING_LIMITS, SUPPORTED_CURRENCIES } from '@p2p-local/config';
+import { LISTING_CONDITIONS, LISTING_TYPES, LISTING_STATUSES, requiresPrice } from '@p2p-local/types';
 import { idSchema, latitudeSchema, longitudeSchema, paginationSchema } from './primitives';
 
 export const listingTypeSchema = z.enum(LISTING_TYPES);

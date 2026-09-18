@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { REPORT_REASONS, REPORT_TARGETS } from '@wantere/types';
+import { REPORT_REASONS, REPORT_TARGETS } from '@p2p-local/types';
 import { idSchema } from './primitives';
 
 export const createReportSchema = z.object({

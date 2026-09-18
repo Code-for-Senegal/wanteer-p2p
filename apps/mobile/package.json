@@ -1,5 +1,5 @@
 {
-  "name": "@wantere/mobile",
+  "name": "@p2p-local/mobile",
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
@@ -10,31 +10,53 @@
     "ios": "expo start --ios",
     "build": "expo export --platform ios --platform android --output-dir dist",
     "lint": "eslint app components features lib providers stores",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "assets:build": "python3 scripts/build-app-assets.py",
+    "test": "jest --passWithNoTests",
+    "eas-build-post-install": "cd ../.. && pnpm exec turbo run build --filter=@p2p-local/config --filter=@p2p-local/design-tokens --filter=@p2p-local/types --filter=@p2p-local/validation"
   },
   "dependencies": {
+    "@p2p-local/config": "workspace:*",
+    "@p2p-local/design-tokens": "workspace:*",
+    "@p2p-local/types": "workspace:*",
+    "@p2p-local/validation": "workspace:*",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@tanstack/react-query": "^5.102.8",
-    "@wantere/api-client": "workspace:*",
-    "@wantere/config": "workspace:*",
-    "@wantere/design-tokens": "workspace:*",
-    "@wantere/types": "workspace:*",
-    "@wantere/validation": "workspace:*",
-    "expo": "^57.0.20",
-    "expo-router": "~57.0.19",
-    "expo-secure-store": "~57.0.3",
+    "expo": "^57.0.24",
+    "expo-constants": "~57.0.19",
+    "expo-crypto": "~57.0.0",
+    "expo-file-system": "~57.0.7",
+    "expo-image": "~57.0.0",
+    "expo-image-picker": "~57.0.19",
+    "expo-linking": "~57.0.10",
+    "expo-router": "~57.0.22",
+    "expo-splash-screen": "~57.0.0",
     "expo-status-bar": "~57.0.1",
+    "expo-updates": "~57.0.23",
     "react": "19.2.3",
     "react-native": "0.86.3",
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "~4.26.2",
+    "zod": "^4.5.4",
     "zustand": "^5.0.15"
   },
   "devDependencies": {
+    "@p2p-local/eslint-config": "workspace:*",
+    "@p2p-local/typescript-config": "workspace:*",
+    "@types/jest": "^29.5.14",
     "@types/react": "^19.2.18",
-    "@wantere/eslint-config": "workspace:*",
-    "@wantere/typescript-config": "workspace:*",
     "eslint": "^10.10.0",
+    "jest": "^29.7.0",
+    "jest-expo": "~57.0.0",
     "typescript": "~6.0.3"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/$1"
+    },
+    "setupFiles": [
+      "<rootDir>/jest.setup.js"
+    ]
   }
 }

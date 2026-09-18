@@ -1,38 +1,56 @@
-import { useQuery } from '@tanstack/react-query';
-import type { Paginated } from '@wantere/types';
-import { apiPath, request } from '@/lib/api';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useListingRepository } from './listing-repository.context';
+import type { DraftListing } from './listing.schema';
+import type { ListingAuthor, ListingFilter } from './listing.types';
 
-export interface ListingSummary {
-  id: string;
-  title: string;
-  type: string;
-  price: number | null;
-  currency: string;
-  coverUrl: string | null;
-  distanceMeters: number | null;
-  location: { displayName: string } | null;
-}
+const LISTINGS = ['listings'] as const;
 
-export interface ListingQuery {
-  q?: string;
-  categoryId?: string;
-  latitude?: number;
-  longitude?: number;
-  radius?: number;
-}
+export function useListings(filter: ListingFilter = {}) {
+  const repository = useListingRepository();
 
-export function useListings(query: ListingQuery = {}) {
   return useQuery({
-    queryKey: ['listings', query],
-    queryFn: () => {
-      const params = new URLSearchParams();
-      for (const [key, value] of Object.entries(query)) {
-        if (value !== undefined && value !== '') {
-          params.set(key, String(value));
-        }
-      }
-      const suffix = params.toString();
-      return request<Paginated<ListingSummary>>(apiPath(`/listings${suffix ? `?${suffix}` : ''}`));
-    },
+    queryKey: [...LISTINGS, filter],
+    queryFn: () => repository.list(filter),
+  });
+}
+
+export function useListing(id: string | undefined) {
+  const repository = useListingRepository();
+
+  return useQuery({
+    queryKey: [...LISTINGS, 'detail', id],
+    queryFn: () => repository.findById(id as string),
+    enabled: Boolean(id),
+  });
+}
+
+export function usePublishListing() {
+  const repository = useListingRepository();
+  const client = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ draft, author }: { draft: DraftListing; author: ListingAuthor }) =>
+      repository.create(draft, author),
+    onSuccess: () => client.invalidateQueries({ queryKey: LISTINGS }),
+  });
+}
+
+export function useMarkAsCompleted() {
+  const repository = useListingRepository();
+  const client = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => repository.markAsCompleted(id),
+    onSuccess: () => client.invalidateQueries({ queryKey: LISTINGS }),
+  });
+}
+
+export function useRemoveListing() {
+  const repository = useListingRepository();
+  const client = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => repository.remove(id),
+    onSuccess: () => client.invalidateQueries({ queryKey: LISTINGS }),
   });
 }

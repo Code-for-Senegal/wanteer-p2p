@@ -1,4 +1,4 @@
-import type { PublicLocation } from '@wantere/types';
+import type { PublicLocation } from '@p2p-local/types';
 
 export interface ListingSummary {
   id: string;

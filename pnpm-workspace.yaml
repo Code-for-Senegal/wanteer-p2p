@@ -14,3 +14,14 @@ allowBuilds:
   msgpackr-extract: true
   prisma: true
   unrs-resolver: true
+
+minimumReleaseAgeExclude:
+  - '@expo/cli@57.0.26'
+  - expo-asset@57.0.18
+  - expo-constants@57.0.19
+  - expo@57.0.24
+  - '@expo/metro-runtime@57.0.16'
+  - '@expo/ui@57.0.19'
+  - expo-image-picker@57.0.19
+  - expo-router@57.0.22
+  - expo-updates@57.0.23
