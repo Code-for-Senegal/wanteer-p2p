@@ -18,7 +18,7 @@
       "bundleIdentifier": "org.codeforsenegal.p2plocal",
       "infoPlist": {
         "NSCameraUsageDescription": "L'application utilise l'appareil photo pour la photo de votre annonce.",
-        "NSPhotoLibraryUsageDescription": "L'application acc\u00e8de \u00e0 vos photos pour illustrer votre annonce."
+        "NSPhotoLibraryUsageDescription": "L'application accède à vos photos pour illustrer votre annonce."
       }
     },
     "android": {
@@ -26,14 +26,18 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0f7f4d"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "plugins": [
       "expo-router",
       [
         "expo-image-picker",
         {
-          "photosPermission": "L'application acc\u00e8de \u00e0 vos photos pour illustrer votre annonce.",
+          "photosPermission": "L'application accède à vos photos pour illustrer votre annonce.",
           "cameraPermission": "L'application utilise l'appareil photo pour la photo de votre annonce."
         }
       ],
@@ -54,6 +58,12 @@
       "eas": {
         "projectId": "30a30237-579b-4046-ace2-ff2dab825bac"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/30a30237-579b-4046-ace2-ff2dab825bac"
     }
   }
 }
