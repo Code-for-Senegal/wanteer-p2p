@@ -12,7 +12,8 @@
     "lint": "eslint app components features lib providers stores",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "assets:build": "python3 scripts/build-app-assets.py",
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests",
+    "eas-build-post-install": "cd ../.. && pnpm exec turbo run build --filter=@p2p-local/config --filter=@p2p-local/design-tokens --filter=@p2p-local/types --filter=@p2p-local/validation"
   },
   "dependencies": {
     "@p2p-local/config": "workspace:*",
