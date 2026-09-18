@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import type { Paginated } from '@wantere/types';
+import type { Paginated } from '@p2p-local/types';
 import { apiPath, request } from '@/lib/api';
 
 export interface ListingSummary {

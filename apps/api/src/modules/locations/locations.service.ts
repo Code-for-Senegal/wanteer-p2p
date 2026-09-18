@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { DEFAULT_COUNTRY, PUBLIC_LOCATION_PRECISION_DEGREES } from '@wantere/config';
-import type { PublicLocation } from '@wantere/types';
+import { DEFAULT_COUNTRY, PUBLIC_LOCATION_PRECISION_DEGREES } from '@p2p-local/config';
+import type { PublicLocation } from '@p2p-local/types';
 import { PrismaService } from '../../database/prisma.service';
 
 export interface LocationInput {

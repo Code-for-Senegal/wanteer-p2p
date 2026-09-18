@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { ListingType } from '@wantere/types';
+import type { ListingType } from '@p2p-local/types';
 
 interface ListingDraftState {
   title: string;

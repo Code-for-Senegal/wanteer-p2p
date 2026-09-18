@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { colors } from '@wantere/design-tokens';
+import { colors } from '@p2p-local/design-tokens';
 
 export default function TabsLayout() {
   return (

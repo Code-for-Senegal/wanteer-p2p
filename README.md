@@ -1,6 +1,6 @@
-# Wantere
+# P2P Local
 
-Wantere est une plateforme communautaire pour acheter, vendre, donner et
+P2P Local est une plateforme communautaire pour acheter, vendre, donner et
 échanger des biens près de chez soi. Elle est pensée d'abord pour le Sénégal,
 mais rien dans son architecture ne suppose un pays unique.
 
@@ -108,7 +108,7 @@ vivent dans une migration écrite à la main.
 pnpm lint
 pnpm typecheck
 pnpm test
-pnpm --filter @wantere/api test:e2e   # nécessite Postgres et Redis
+pnpm --filter @p2p-local/api test:e2e   # nécessite Postgres et Redis
 pnpm build
 ```
 
@@ -121,7 +121,7 @@ pnpm api:generate
 ```
 
 Cette commande exporte `apps/api/openapi.json` et régénère
-`@wantere/api-client`. Les deux sont versionnés pour que les applications
+`@p2p-local/api-client`. Les deux sont versionnés pour que les applications
 compilent sans API démarrée.
 
 ## Contribuer

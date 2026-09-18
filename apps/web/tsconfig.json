@@ -1,5 +1,5 @@
 {
-  "extends": "@wantere/typescript-config/nextjs.json",
+  "extends": "@p2p-local/typescript-config/nextjs.json",
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"]

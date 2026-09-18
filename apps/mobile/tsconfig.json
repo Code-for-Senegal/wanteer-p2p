@@ -1,5 +1,5 @@
 {
-  "extends": "@wantere/typescript-config/react-native.json",
+  "extends": "@p2p-local/typescript-config/react-native.json",
   "compilerOptions": {
     "paths": {
       "@/*": ["./*"]

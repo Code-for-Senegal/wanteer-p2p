@@ -8,7 +8,7 @@ importers:
 
   .:
     devDependencies:
-      '@wantere/prettier-config':
+      '@p2p-local/prettier-config':
         specifier: workspace:*
         version: link:packages/prettier-config
       prettier:
@@ -23,16 +23,16 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.102.8
         version: 5.102.8(react@19.2.3)
-      '@wantere/api-client':
+      '@p2p-local/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
-      '@wantere/config':
+      '@p2p-local/config':
         specifier: workspace:*
         version: link:../../packages/config
-      '@wantere/design-tokens':
+      '@p2p-local/design-tokens':
         specifier: workspace:*
         version: link:../../packages/design-tokens
-      '@wantere/types':
+      '@p2p-local/types':
         specifier: workspace:*
         version: link:../../packages/types
       clsx:
@@ -63,10 +63,10 @@ importers:
       '@types/react-dom':
         specifier: ^19.2.7
         version: 19.2.7(@types/react@19.2.18)
-      '@wantere/eslint-config':
+      '@p2p-local/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
-      '@wantere/typescript-config':
+      '@p2p-local/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
       eslint:
@@ -114,10 +114,10 @@ importers:
       '@prisma/client':
         specifier: ^7.10.0
         version: 7.10.0(prisma@7.10.0(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@6.0.3))(typescript@6.0.3)
-      '@wantere/config':
+      '@p2p-local/config':
         specifier: workspace:*
         version: link:../../packages/config
-      '@wantere/types':
+      '@p2p-local/types':
         specifier: workspace:*
         version: link:../../packages/types
       argon2:
@@ -181,10 +181,10 @@ importers:
       '@types/supertest':
         specifier: ^7.2.1
         version: 7.2.1
-      '@wantere/eslint-config':
+      '@p2p-local/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
-      '@wantere/typescript-config':
+      '@p2p-local/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
       cross-env:
@@ -226,19 +226,19 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.102.8
         version: 5.102.8(react@19.2.3)
-      '@wantere/api-client':
+      '@p2p-local/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
-      '@wantere/config':
+      '@p2p-local/config':
         specifier: workspace:*
         version: link:../../packages/config
-      '@wantere/design-tokens':
+      '@p2p-local/design-tokens':
         specifier: workspace:*
         version: link:../../packages/design-tokens
-      '@wantere/types':
+      '@p2p-local/types':
         specifier: workspace:*
         version: link:../../packages/types
-      '@wantere/validation':
+      '@p2p-local/validation':
         specifier: workspace:*
         version: link:../../packages/validation
       expo:
@@ -272,10 +272,10 @@ importers:
       '@types/react':
         specifier: ^19.2.18
         version: 19.2.18
-      '@wantere/eslint-config':
+      '@p2p-local/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
-      '@wantere/typescript-config':
+      '@p2p-local/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
       eslint:
@@ -293,19 +293,19 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.102.8
         version: 5.102.8(react@19.2.3)
-      '@wantere/api-client':
+      '@p2p-local/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
-      '@wantere/config':
+      '@p2p-local/config':
         specifier: workspace:*
         version: link:../../packages/config
-      '@wantere/design-tokens':
+      '@p2p-local/design-tokens':
         specifier: workspace:*
         version: link:../../packages/design-tokens
-      '@wantere/types':
+      '@p2p-local/types':
         specifier: workspace:*
         version: link:../../packages/types
-      '@wantere/validation':
+      '@p2p-local/validation':
         specifier: workspace:*
         version: link:../../packages/validation
       clsx:
@@ -342,10 +342,10 @@ importers:
       '@types/react-dom':
         specifier: ^19.2.7
         version: 19.2.7(@types/react@19.2.18)
-      '@wantere/eslint-config':
+      '@p2p-local/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
-      '@wantere/typescript-config':
+      '@p2p-local/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
       eslint:
@@ -360,10 +360,10 @@ importers:
 
   packages/api-client:
     devDependencies:
-      '@wantere/eslint-config':
+      '@p2p-local/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
-      '@wantere/typescript-config':
+      '@p2p-local/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       eslint:
@@ -378,10 +378,10 @@ importers:
 
   packages/config:
     devDependencies:
-      '@wantere/eslint-config':
+      '@p2p-local/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
-      '@wantere/typescript-config':
+      '@p2p-local/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       eslint:
@@ -393,10 +393,10 @@ importers:
 
   packages/design-tokens:
     devDependencies:
-      '@wantere/eslint-config':
+      '@p2p-local/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
-      '@wantere/typescript-config':
+      '@p2p-local/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       eslint:
@@ -434,10 +434,10 @@ importers:
 
   packages/types:
     devDependencies:
-      '@wantere/eslint-config':
+      '@p2p-local/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
-      '@wantere/typescript-config':
+      '@p2p-local/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       eslint:
@@ -451,20 +451,20 @@ importers:
 
   packages/validation:
     dependencies:
-      '@wantere/config':
+      '@p2p-local/config':
         specifier: workspace:*
         version: link:../config
-      '@wantere/types':
+      '@p2p-local/types':
         specifier: workspace:*
         version: link:../types
       zod:
         specifier: ^4.5.4
         version: 4.5.4
     devDependencies:
-      '@wantere/eslint-config':
+      '@p2p-local/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
-      '@wantere/typescript-config':
+      '@p2p-local/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       eslint:

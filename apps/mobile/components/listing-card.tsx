@@ -1,6 +1,6 @@
 import { Link } from 'expo-router';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { colors, fontSize, radius, spacing } from '@wantere/design-tokens';
+import { colors, fontSize, radius, spacing } from '@p2p-local/design-tokens';
 import { formatPrice } from '@/lib/format';
 import type { ListingSummary } from '@/features/listings/use-listings';
 

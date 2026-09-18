@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { ValidationPipe, VersioningType, type INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { API_PREFIX } from '@wantere/config';
+import { API_PREFIX } from '@p2p-local/config';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/database/prisma.service';
 import { RedisService } from '../src/infrastructure/redis/redis.service';

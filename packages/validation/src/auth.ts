@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { OTP } from '@wantere/config';
+import { OTP } from '@p2p-local/config';
 import { phoneSchema } from './primitives';
 
 export const registerSchema = z.object({

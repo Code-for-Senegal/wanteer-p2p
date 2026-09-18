@@ -1,5 +1,5 @@
-const ACCESS_TOKEN_KEY = 'wantere.admin.accessToken';
-const REFRESH_TOKEN_KEY = 'wantere.admin.refreshToken';
+const ACCESS_TOKEN_KEY = 'p2p-local.admin.accessToken';
+const REFRESH_TOKEN_KEY = 'p2p-local.admin.refreshToken';
 
 export interface AuthTokens {
   accessToken: string;

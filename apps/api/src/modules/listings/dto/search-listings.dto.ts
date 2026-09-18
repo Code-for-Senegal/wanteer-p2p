@@ -13,7 +13,7 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { LISTING_CONDITIONS, LISTING_TYPES } from '@wantere/types';
+import { LISTING_CONDITIONS, LISTING_TYPES } from '@p2p-local/types';
 import { PaginationQueryDto } from '../../../common/dto/pagination.dto';
 
 const SORTS = ['recent', 'price_asc', 'price_desc', 'distance'] as const;

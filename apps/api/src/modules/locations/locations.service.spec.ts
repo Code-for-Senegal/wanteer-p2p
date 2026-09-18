@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { PUBLIC_LOCATION_PRECISION_DEGREES } from '@wantere/config';
+import { PUBLIC_LOCATION_PRECISION_DEGREES } from '@p2p-local/config';
 import { LocationsService } from './locations.service';
 import { PrismaService } from '../../database/prisma.service';
 

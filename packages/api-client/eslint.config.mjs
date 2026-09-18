@@ -1,3 +1,3 @@
-import base from '@wantere/eslint-config/base';
+import base from '@p2p-local/eslint-config/base';
 
 export default [...base, { ignores: ['src/generated/**'] }];

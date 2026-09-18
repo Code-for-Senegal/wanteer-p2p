@@ -57,7 +57,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Apply database migrations
-        run: pnpm --filter @wantere/api db:deploy
+        run: pnpm --filter @p2p-local/api db:deploy
 
       - run: pnpm lint
 
@@ -66,6 +66,6 @@ jobs:
       - run: pnpm test
 
       - name: Run end-to-end tests
-        run: pnpm --filter @wantere/api test:e2e
+        run: pnpm --filter @p2p-local/api test:e2e
 
       - run: pnpm build

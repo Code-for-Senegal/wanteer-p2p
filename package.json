@@ -1,5 +1,5 @@
 {
-  "name": "wantere",
+  "name": "p2p-local",
   "private": true,
   "version": "0.1.0",
   "license": "MIT",
@@ -15,15 +15,15 @@
     "test": "turbo run test",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
-    "api:generate": "pnpm --filter @wantere/api openapi:export && pnpm --filter @wantere/api-client generate",
-    "db:migrate": "pnpm --filter @wantere/api db:migrate",
-    "db:seed": "pnpm --filter @wantere/api db:seed",
-    "db:studio": "pnpm --filter @wantere/api db:studio",
+    "api:generate": "pnpm --filter @p2p-local/api openapi:export && pnpm --filter @p2p-local/api-client generate",
+    "db:migrate": "pnpm --filter @p2p-local/api db:migrate",
+    "db:seed": "pnpm --filter @p2p-local/api db:seed",
+    "db:studio": "pnpm --filter @p2p-local/api db:studio",
     "docker:up": "docker compose -f docker/docker-compose.dev.yml up -d",
     "docker:down": "docker compose -f docker/docker-compose.dev.yml down"
   },
   "devDependencies": {
-    "@wantere/prettier-config": "workspace:*",
+    "@p2p-local/prettier-config": "workspace:*",
     "prettier": "^3.9.6",
     "turbo": "^2.10.12"
   }

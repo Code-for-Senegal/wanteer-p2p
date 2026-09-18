@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import '@wantere/design-tokens/css';
+@import '@p2p-local/design-tokens/css';
 
 :root {
   color-scheme: light;

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PAGINATION } from '@wantere/config';
+import { PAGINATION } from '@p2p-local/config';
 
 export const phoneSchema = z
   .string()

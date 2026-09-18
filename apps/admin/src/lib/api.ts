@@ -1,5 +1,5 @@
-import { configureApiClient, request } from '@wantere/api-client';
-import { API_PREFIX } from '@wantere/config';
+import { configureApiClient, request } from '@p2p-local/api-client';
+import { API_PREFIX } from '@p2p-local/config';
 import { session } from '@/features/auth/session';
 
 configureApiClient({

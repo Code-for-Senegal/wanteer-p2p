@@ -2,7 +2,7 @@
 
 ## Our pledge
 
-We want participation in Wantere to be a harassment-free experience for
+We want participation in P2P Local to be a harassment-free experience for
 everyone, regardless of age, body size, disability, ethnicity, gender identity
 and expression, level of experience, nationality, personal appearance, race,
 religion, or sexual identity and orientation.

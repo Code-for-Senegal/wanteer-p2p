@@ -1,7 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
 
-const ACCESS_TOKEN_KEY = 'wantere.accessToken';
-const REFRESH_TOKEN_KEY = 'wantere.refreshToken';
+const ACCESS_TOKEN_KEY = 'p2p-local.accessToken';
+const REFRESH_TOKEN_KEY = 'p2p-local.refreshToken';
 
 let cachedAccessToken: string | null = null;
 

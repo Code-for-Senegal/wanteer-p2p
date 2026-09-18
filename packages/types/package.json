@@ -1,5 +1,5 @@
 {
-  "name": "@wantere/types",
+  "name": "@p2p-local/types",
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
@@ -15,8 +15,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
-    "@wantere/eslint-config": "workspace:*",
-    "@wantere/typescript-config": "workspace:*",
+    "@p2p-local/eslint-config": "workspace:*",
+    "@p2p-local/typescript-config": "workspace:*",
     "eslint": "^10.10.0",
     "typescript": "~6.0.3"
   }

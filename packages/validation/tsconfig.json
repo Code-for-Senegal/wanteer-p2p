@@ -1,5 +1,5 @@
 {
-  "extends": "@wantere/typescript-config/library.json",
+  "extends": "@p2p-local/typescript-config/library.json",
   "include": ["src/**/*"],
   "compilerOptions": {
     "outDir": "dist",

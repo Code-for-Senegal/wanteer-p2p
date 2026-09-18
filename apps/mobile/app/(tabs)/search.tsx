@@ -1,5 +1,5 @@
 import { FlatList, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { colors, fontSize, radius, spacing } from '@wantere/design-tokens';
+import { colors, fontSize, radius, spacing } from '@p2p-local/design-tokens';
 import { useCategories } from '@/features/categories/use-categories';
 import { useListings } from '@/features/listings/use-listings';
 import { useSearchFilters } from '@/stores/search-filters.store';

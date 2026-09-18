@@ -4,7 +4,7 @@ import { QueryProvider } from '@/providers/query-provider';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
-  title: 'Wantere Admin',
+  title: 'P2P Local Admin',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

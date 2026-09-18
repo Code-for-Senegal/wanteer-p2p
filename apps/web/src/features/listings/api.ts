@@ -1,5 +1,5 @@
 import { apiPath, request } from '@/lib/api';
-import type { Paginated } from '@wantere/types';
+import type { Paginated } from '@p2p-local/types';
 
 export interface ListingSummary {
   id: string;

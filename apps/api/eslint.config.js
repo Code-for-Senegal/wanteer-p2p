@@ -1,1 +1,1 @@
-export { default } from '@wantere/eslint-config/nest';
+export { default } from '@p2p-local/eslint-config/nest';

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { colors, spacing } from '@wantere/design-tokens';
+import { colors, spacing } from '@p2p-local/design-tokens';
 
 export default function ProfileScreen() {
   return (

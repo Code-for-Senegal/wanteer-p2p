@@ -1,5 +1,5 @@
 {
-  "name": "@wantere/admin",
+  "name": "@p2p-local/admin",
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
@@ -12,10 +12,10 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.102.8",
-    "@wantere/api-client": "workspace:*",
-    "@wantere/config": "workspace:*",
-    "@wantere/design-tokens": "workspace:*",
-    "@wantere/types": "workspace:*",
+    "@p2p-local/api-client": "workspace:*",
+    "@p2p-local/config": "workspace:*",
+    "@p2p-local/design-tokens": "workspace:*",
+    "@p2p-local/types": "workspace:*",
     "clsx": "^2.1.1",
     "next": "^16.3.4",
     "react": "19.2.3",
@@ -27,8 +27,8 @@
     "@types/node": "^26.4.1",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
-    "@wantere/eslint-config": "workspace:*",
-    "@wantere/typescript-config": "workspace:*",
+    "@p2p-local/eslint-config": "workspace:*",
+    "@p2p-local/typescript-config": "workspace:*",
     "eslint": "^10.10.0",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.3"

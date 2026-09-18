@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { colors, fontSize, spacing } from '@wantere/design-tokens';
+import { colors, fontSize, spacing } from '@p2p-local/design-tokens';
 import { apiPath, request } from '@/lib/api';
 import { formatPrice } from '@/lib/format';
 import type { ListingSummary } from '@/features/listings/use-listings';

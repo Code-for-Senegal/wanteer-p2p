@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiPath, request } from '@/lib/api';
-import type { Paginated } from '@wantere/types';
+import type { Paginated } from '@p2p-local/types';
 
 interface Report {
   id: string;

@@ -26,7 +26,7 @@ export class UsersService {
 
     return {
       id: user.id,
-      displayName: user.profile?.displayName ?? 'Membre Wantere',
+      displayName: user.profile?.displayName ?? 'Membre P2P Local',
       bio: user.profile?.bio ?? null,
       city: user.profile?.city ?? null,
       avatarUrl: user.profile?.avatarKey ? this.storage.publicUrl(user.profile.avatarKey) : null,

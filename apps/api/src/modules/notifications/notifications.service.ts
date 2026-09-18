@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import type { Queue } from 'bullmq';
-import type { NotificationChannel } from '@wantere/types';
+import type { NotificationChannel } from '@p2p-local/types';
 import { PrismaService } from '../../database/prisma.service';
 import type { Prisma } from '../../generated/prisma/client';
 import { paginate, type PaginationQueryDto } from '../../common/dto/pagination.dto';

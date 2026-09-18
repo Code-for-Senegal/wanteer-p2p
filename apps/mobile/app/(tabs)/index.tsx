@@ -1,5 +1,5 @@
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
-import { colors, spacing } from '@wantere/design-tokens';
+import { colors, spacing } from '@p2p-local/design-tokens';
 import { useListings } from '@/features/listings/use-listings';
 import { ListingCard } from '@/components/listing-card';
 

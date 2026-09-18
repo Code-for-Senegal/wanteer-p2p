@@ -10,7 +10,7 @@ export default function ConsoleLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen">
       <aside className="w-56 shrink-0 border-r border-neutral-200 bg-white px-4 py-6">
-        <p className="mb-6 text-sm font-semibold tracking-wide text-neutral-500">WANTERE</p>
+        <p className="mb-6 text-sm font-semibold tracking-wide text-neutral-500">P2P LOCAL</p>
         <nav className="space-y-1">
           {navigation.map((item) => (
             <Link

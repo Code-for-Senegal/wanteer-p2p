@@ -1,1 +1,1 @@
-export { default } from '@wantere/eslint-config/next';
+export { default } from '@p2p-local/eslint-config/next';

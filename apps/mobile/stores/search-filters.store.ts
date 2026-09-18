@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { ListingType } from '@wantere/types';
+import type { ListingType } from '@p2p-local/types';
 
 /** Client-only state: what the user is currently filtering on, nothing fetched. */
 interface SearchFiltersState {

@@ -4,7 +4,7 @@ import { QueryProvider } from '@/providers/query-provider';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
-  title: 'Wantere',
+  title: 'P2P Local',
   description: 'Acheter, vendre, donner et échanger près de chez soi.',
 };
 

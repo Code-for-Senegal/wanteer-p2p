@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsIn, IsOptional, IsString, Length, Matches, MaxLength } from 'class-validator';
-import { OTP } from '@wantere/config';
+import { OTP } from '@p2p-local/config';
 
 const E164 = /^\+[1-9]\d{7,14}$/;
 

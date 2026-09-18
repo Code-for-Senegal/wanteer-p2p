@@ -1,19 +1,19 @@
 {
   "expo": {
-    "name": "Wantere",
-    "slug": "wantere",
+    "name": "P2P Local",
+    "slug": "p2p-local",
     "version": "0.1.0",
     "orientation": "portrait",
-    "scheme": "wantere",
+    "scheme": "p2plocal",
     "userInterfaceStyle": "light",
     "platforms": ["ios", "android"],
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.wantere.app"
+      "bundleIdentifier": "org.codeforsenegal.p2plocal"
     },
     "android": {
-      "package": "com.wantere.app",
+      "package": "org.codeforsenegal.p2plocal",
       "edgeToEdgeEnabled": true
     },
     "plugins": ["expo-router", "expo-secure-store"],
