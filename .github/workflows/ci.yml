@@ -30,6 +30,8 @@ jobs:
 
       - run: pnpm --filter @p2p-local/mobile... typecheck
 
+      - run: pnpm --filter @p2p-local/mobile test
+
       # Informative: expo-doctor reaches the Expo registry and reports drift in
       # transitive versions we do not control.
       - name: Check the Expo project
@@ -95,4 +97,6 @@ jobs:
       - name: Run end-to-end tests
         run: pnpm --filter @p2p-local/api test:e2e
 
-      - run: pnpm build
+      # The mobile bundle is built by EAS, not here: `expo export` is slow and
+      # reaches the network for no verification CI does not already have.
+      - run: pnpm build --filter=!@p2p-local/mobile
