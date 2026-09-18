@@ -30,9 +30,12 @@ export default function ListingScreen() {
 
   const item = listing.data;
   const badge = formatListingBadge(item.type, item.price);
-  const contactable = canBeContacted(item, Date.now());
+  // Expiry is reconciled by archiveExpired() on launch, so the status is what
+  // the screen reads; the clock is checked in the handler, not during render.
+  const contactable = item.status === 'ACTIVE';
 
   async function contact() {
+    if (!canBeContacted(item, Date.now())) return;
     // The number is never rendered: it goes straight into the link.
     const message = buildContactMessage({
       firstName: profile?.firstName ?? 'un voisin',

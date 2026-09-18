@@ -1,19 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput } from 'react-native';
 import { colors, fontSize, radius, spacing } from '@p2p-local/design-tokens';
 import { useContactProfile } from '@/features/contact/contact-profile';
 
 export default function ProfileScreen() {
   const { profile, isLoading, save } = useContactProfile();
-  const [firstName, setFirstName] = useState('');
-  const [phone, setPhone] = useState('');
+  // Edits win, the stored profile fills the gap: deriving avoids an effect that
+  // would write state back into the component on every load.
+  const [edits, setEdits] = useState<{ firstName?: string; phone?: string }>({});
+  const firstName = edits.firstName ?? profile?.firstName ?? '';
+  const phone = edits.phone ?? profile?.phone ?? '';
 
-  useEffect(() => {
-    if (profile !== null) {
-      setFirstName(profile.firstName);
-      setPhone(profile.phone);
-    }
-  }, [profile]);
+  const setFirstName = (value: string) => setEdits((current) => ({ ...current, firstName: value }));
+  const setPhone = (value: string) => setEdits((current) => ({ ...current, phone: value }));
 
   async function submit() {
     try {

@@ -49,9 +49,10 @@ export async function pickPhotoFromLibrary(): Promise<string | null> {
   if (!permission.granted) return null;
 
   const result = await ImagePicker.launchImageLibraryAsync(PICKER_OPTIONS);
-  if (result.canceled) return null;
+  const asset = result.canceled ? undefined : result.assets[0];
+  if (!asset) return null;
 
-  return persistPickedPhoto(result.assets[0].uri);
+  return persistPickedPhoto(asset.uri);
 }
 
 export async function takePhoto(): Promise<string | null> {
@@ -59,7 +60,8 @@ export async function takePhoto(): Promise<string | null> {
   if (!permission.granted) return null;
 
   const result = await ImagePicker.launchCameraAsync(PICKER_OPTIONS);
-  if (result.canceled) return null;
+  const asset = result.canceled ? undefined : result.assets[0];
+  if (!asset) return null;
 
-  return persistPickedPhoto(result.assets[0].uri);
+  return persistPickedPhoto(asset.uri);
 }
