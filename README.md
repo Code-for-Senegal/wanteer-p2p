@@ -9,12 +9,20 @@ rattachée à un quartier, les prix sont visibles, le don et le troc sont trait�
 au même niveau que la vente, et la modération fait partie du domaine métier
 plutôt que d'être ajoutée après coup.
 
+`P2P Local` est un nom de code. Il tient la place d'un nom définitif qui reste à
+choisir, et il est isolé dans la configuration pour pouvoir être remplacé en une
+seule passe.
+
 ## État du projet
 
-Les fondations sont en place : authentification, profils, catégories, annonces
-avec recherche géolocalisée, favoris, signalements et notifications. Les
-conversations, les offres, les commandes, les achats groupés et l'observatoire
-des prix sont prévus dans l'architecture mais pas encore implémentés — voir
+La V1 est une **application mobile qui fonctionne sans backend** : les annonces
+sont enregistrées sur l'appareil, la publication ne demande aucun compte, et la
+mise en relation passe par WhatsApp. C'est un socle destiné à être enrichi, pas
+une application finie.
+
+L'API existe, elle est testée, et elle **n'est pas consommée par la V1**. Elle
+reste versionnée parce que le jour où les annonces devront circuler entre
+plusieurs téléphones, c'est elle qui prendra le relais — voir
 [docs/architecture.md](docs/architecture.md).
 
 ## Stack
@@ -22,63 +30,68 @@ des prix sont prévus dans l'architecture mais pas encore implémentés — voir
 | Domaine  | Choix                                                        |
 | -------- | ------------------------------------------------------------ |
 | Monorepo | Turborepo, pnpm workspaces, TypeScript strict                |
+| Mobile   | Expo SDK 57, Expo Router, TanStack Query, Zustand, AsyncStorage |
 | API      | NestJS, PostgreSQL + PostGIS, Prisma, Redis, BullMQ, OpenAPI |
-| Web      | Next.js App Router, Tailwind CSS, TanStack Query             |
-| Mobile   | Expo, Expo Router, TanStack Query, Zustand                   |
-| Admin    | Next.js App Router, Tailwind CSS, TanStack Query             |
 
 ## Structure du dépôt
 
 ```
 apps/
-  api/      Monolithe modulaire NestJS, source de vérité des règles métier
-  web/      Site public
-  mobile/   Application Expo
-  admin/    Back-office
+  mobile/   Application Expo — la V1
+  api/      Monolithe modulaire NestJS, hors périmètre de la V1
 packages/
-  api-client/       Client fetch généré depuis le document OpenAPI
-  validation/       Schémas Zod partagés entre les clients
+  api-client/       Client fetch généré depuis le document OpenAPI.
+                    Aucune application ne le consomme aujourd'hui ; il est
+                    conservé avec l'API dont il est le pendant généré.
+  validation/       Schémas Zod partagés
   types/            Enums du domaine et primitives communes
-  config/           Constantes produit (limites, pagination, devises)
-  design-tokens/    Couleurs, espacements, typographie, thème Tailwind
+  config/           Constantes produit (limites, pagination, devises, quartiers)
+  design-tokens/    Couleurs, espacements, typographie
   eslint-config/    Configurations ESLint flat
   typescript-config/
   prettier-config/
-docker/     Postgres, Redis et MinIO en local
-docs/       Notes d'architecture
+docker/     Postgres, Redis et MinIO en local, pour l'API
+docs/       Notes d'architecture et références de conception
 ```
 
 ## Prérequis
 
-- Node.js 22 ou plus récent (voir `.nvmrc`)
+- Node.js 24 ou plus récent (voir `.nvmrc`)
 - pnpm 11
-- Docker, pour Postgres et Redis
+- Expo Go sur un téléphone, ou un émulateur Android / simulateur iOS
+- Docker, uniquement pour travailler sur l'API
 
 ## Démarrage
 
 ```bash
+pnpm install
+pnpm --filter @p2p-local/mobile dev
+```
+
+Le bundler Expo affiche un QR code ; l'application s'ouvre dans Expo Go. Aucune
+variable d'environnement n'est nécessaire : la V1 ne contacte aucun serveur.
+
+### Travailler sur l'API
+
+```bash
 cp apps/api/.env.example apps/api/.env
-cp apps/web/.env.example apps/web/.env
-cp apps/admin/.env.example apps/admin/.env
-cp apps/mobile/.env.example apps/mobile/.env
 
 pnpm install
 pnpm docker:up
 
 pnpm db:migrate
 pnpm db:seed
-pnpm dev
+pnpm --filter @p2p-local/api dev
 ```
 
-`pnpm dev` démarre l'API sur le port 4000, le site sur 3000, le back-office sur
-3001 et le bundler Expo. Swagger est servi sur <http://localhost:4000/docs> en
-dehors de la production.
+L'API démarre sur le port 4000. Swagger est servi sur
+<http://localhost:4000/docs> en dehors de la production.
 
 ## Variables d'environnement
 
-Chaque application fournit un `.env.example` ; aucun secret n'est versionné.
-L'API valide son environnement au démarrage et refuse de se lancer s'il est
-invalide.
+L'application mobile n'a aucune variable d'environnement en V1. L'API fournit un
+`.env.example` ; aucun secret n'est versionné. Elle valide son environnement au
+démarrage et refuse de se lancer s'il est invalide.
 
 | Variable                           | Utilisée par | Remarques                          |
 | ---------------------------------- | ------------ | ---------------------------------- |
@@ -86,8 +99,25 @@ invalide.
 | `REDIS_URL`                        | api          | Files, rate limiting, throttle OTP |
 | `JWT_SECRET`, `JWT_REFRESH_SECRET` | api          | 32 caractères minimum              |
 | `CORS_ORIGINS`                     | api          | Liste séparée par des virgules     |
-| `NEXT_PUBLIC_API_URL`              | web, admin   | Origine de l'API, sans le préfixe  |
-| `EXPO_PUBLIC_API_URL`              | mobile       | Origine de l'API, sans le préfixe  |
+
+## Builds EAS
+
+L'application est liée à un projet EAS. Trois profils sont définis dans
+`apps/mobile/eas.json` :
+
+| Profil        | Sortie                   | Usage                                  |
+| ------------- | ------------------------ | -------------------------------------- |
+| `development` | APK avec client de dév   | développement sur appareil réel        |
+| `preview`     | APK, distribution interne | partager une version à tester          |
+| `production`  | App Bundle Android        | publication sur le Play Store          |
+
+```bash
+cd apps/mobile
+npx eas-cli build --platform android --profile preview
+```
+
+Le workflow `.github/workflows/eas-build.yml` déclenche un build à la demande.
+Il exige un secret de dépôt `EXPO_TOKEN`, créé depuis un jeton d'accès Expo.
 
 ## Base de données
 
@@ -111,6 +141,9 @@ pnpm test
 pnpm --filter @p2p-local/api test:e2e   # nécessite Postgres et Redis
 pnpm build
 ```
+
+Côté mobile, `npx expo-doctor` depuis `apps/mobile` vérifie la cohérence du
+projet Expo. Une dépendance Expo s'ajoute toujours avec `npx expo install`.
 
 ## Client API
 

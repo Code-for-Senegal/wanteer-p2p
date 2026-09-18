@@ -4,10 +4,14 @@ Ce dossier réunit les documents visuels qui ont circulé pendant le cadrage du
 projet. Ils sont versionnés ici pour qu'une discussion sur un écart entre le
 code et une maquette porte sur une référence que tout le monde peut ouvrir.
 
-> **Statut : en discussion.** Aucun de ces documents n'a été validé comme la
-> référence de la V1. Ils sont réunis pour permettre la discussion, pas pour la
-> clore. Tant que ce statut n'a pas changé, un écart entre le code et une de ces
-> images n'est pas un bug.
+> **Statut : écartés.** Ni le nom, ni l'identité visuelle, ni les mises en page
+> de ces documents ne peuvent être repris. Ils restent versionnés parce qu'ils
+> documentent le cadrage et le domaine que l'API implémente déjà, mais ils ne
+> sont plus une référence : un écart entre l'application et une de ces images
+> n'est pas un bug.
+>
+> La référence fonctionnelle de la V1 est [`parcours-mvp.md`](parcours-mvp.md),
+> qui décrit ce que l'application fait sans décrire à quoi elle ressemble.
 
 ## Contenu
 
@@ -35,8 +39,17 @@ constat, pas un jugement : les deux sont cohérents pris séparément.
 | Pile | Astro/Tailwind, Supabase ou Firebase | _non spécifiée_ |
 | Périmètre | Annonces, filtres, contact | + achat groupé, observatoire des prix, avis, livraison |
 
-Le code suit aujourd'hui les maquettes : voir la section « Designed for, not
-implemented » de [`../architecture.md`](../architecture.md).
+Arbitrage rendu : la V1 suit la logique du blueprint — mise en relation par
+WhatsApp, pas de messagerie interne, pas de compte. Le code de l'API, lui, suit
+encore les maquettes : voir la section « Designed for, not implemented » de
+[`../architecture.md`](../architecture.md).
+
+Un point reste ouvert. Le blueprint expose un numéro via un lien `wa.me`, la
+maquette d'inscription promet « votre numéro n'apparaît jamais sur vos
+annonces », et `CONTRIBUTING.md` interdit d'exposer un téléphone. L'application
+ne l'affiche nulle part, mais l'auteur d'une annonce devient joignable. Trancher
+entre un relais qui masque les deux numéros, une exposition assumée, ou un
+consentement explicite par annonce est une décision d'équipe.
 
 Trancher entre les deux est une décision d'équipe. Elle n'est pas prise ici.
 

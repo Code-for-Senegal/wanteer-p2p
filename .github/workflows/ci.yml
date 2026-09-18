@@ -9,15 +9,42 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  DATABASE_URL: postgresql://wantere:wantere@localhost:5432/wantere?schema=public
-  REDIS_URL: redis://localhost:6379
-  JWT_SECRET: ci-secret-value-that-is-long-enough-32
-  JWT_REFRESH_SECRET: ci-refresh-secret-long-enough-32-chars
-
 jobs:
-  quality:
+  mobile:
+    name: Mobile
     runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm --filter @p2p-local/mobile... lint
+
+      - run: pnpm --filter @p2p-local/mobile... typecheck
+
+      # Informative: expo-doctor reaches the Expo registry and reports drift in
+      # transitive versions we do not control.
+      - name: Check the Expo project
+        run: pnpm --filter @p2p-local/mobile exec expo-doctor
+        continue-on-error: true
+
+  api:
+    name: API
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: postgresql://wantere:wantere@localhost:5432/wantere?schema=public
+      REDIS_URL: redis://localhost:6379
+      JWT_SECRET: ci-secret-value-that-is-long-enough-32
+      JWT_REFRESH_SECRET: ci-refresh-secret-long-enough-32-chars
 
     services:
       postgres:

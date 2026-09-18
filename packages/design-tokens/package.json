@@ -6,8 +6,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist",
-    "css"
+    "dist"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -25,7 +24,6 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
-    },
-    "./css": "./css/tokens.css"
+    }
   }
 }
