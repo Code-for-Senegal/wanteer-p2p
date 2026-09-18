@@ -26,6 +26,15 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      # `pnpm --filter` runs each package script directly, which bypasses the
+      # `dependsOn: ["^build"]` of turbo.json: the shared packages compile to
+      # dist/ and nothing would build them. Same list as the EAS hook.
+      - name: Build the shared packages
+        run: >-
+          pnpm exec turbo run build
+          --filter=@p2p-local/config --filter=@p2p-local/design-tokens
+          --filter=@p2p-local/types --filter=@p2p-local/validation
+
       - run: pnpm --filter @p2p-local/mobile... lint
 
       - run: pnpm --filter @p2p-local/mobile... typecheck
