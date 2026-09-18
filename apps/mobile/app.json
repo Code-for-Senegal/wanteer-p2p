@@ -6,8 +6,10 @@
     "orientation": "portrait",
     "scheme": "p2plocal",
     "userInterfaceStyle": "light",
-    "platforms": ["ios", "android"],
-    "newArchEnabled": true,
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "icon": "./assets/icon.png",
     "primaryColor": "#0f7f4d",
     "backgroundColor": "#ffffff",
@@ -16,12 +18,11 @@
       "bundleIdentifier": "org.codeforsenegal.p2plocal",
       "infoPlist": {
         "NSCameraUsageDescription": "L'application utilise l'appareil photo pour la photo de votre annonce.",
-        "NSPhotoLibraryUsageDescription": "L'application accède à vos photos pour illustrer votre annonce."
+        "NSPhotoLibraryUsageDescription": "L'application acc\u00e8de \u00e0 vos photos pour illustrer votre annonce."
       }
     },
     "android": {
       "package": "org.codeforsenegal.p2plocal",
-      "edgeToEdgeEnabled": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0f7f4d"
@@ -32,7 +33,7 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "L'application accède à vos photos pour illustrer votre annonce.",
+          "photosPermission": "L'application acc\u00e8de \u00e0 vos photos pour illustrer votre annonce.",
           "cameraPermission": "L'application utilise l'appareil photo pour la photo de votre annonce."
         }
       ],
