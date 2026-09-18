@@ -1,38 +1,10 @@
-import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
-import { colors, spacing } from '@p2p-local/design-tokens';
-import { useListings } from '@/features/listings/use-listings';
-import { ListingCard } from '@/components/listing-card';
+import { PlaceholderScreen } from '@/components/placeholder-screen';
 
 export default function HomeScreen() {
-  const listings = useListings();
-
-  if (listings.isPending) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator color={colors.brand[600]} />
-      </View>
-    );
-  }
-
   return (
-    <FlatList
-      contentContainerStyle={styles.list}
-      data={listings.data?.items ?? []}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <ListingCard listing={item} />}
-      ListEmptyComponent={
-        <Text style={styles.empty}>
-          {listings.isError
-            ? 'Les annonces sont indisponibles pour le moment.'
-            : 'Aucune annonce publiée près de vous.'}
-        </Text>
-      }
+    <PlaceholderScreen
+      title="Annonces du quartier"
+      description="La liste, les filtres par type et le choix du quartier arrivent avec la couche de données locale."
     />
   );
 }
-
-const styles = StyleSheet.create({
-  list: { padding: spacing[4], gap: spacing[3] },
-  centered: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  empty: { color: colors.neutral[500], textAlign: 'center', marginTop: spacing[10] },
-});
