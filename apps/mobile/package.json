@@ -37,6 +37,7 @@
     "react-native": "0.86.3",
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "~4.26.2",
+    "react-native-svg": "15.15.4",
     "zod": "^4.5.4",
     "zustand": "^5.0.15"
   },
